@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Dual Objectives</span><br>
+			The original RtCW used screenshot images to display to the player where they 
+			should be going to complete the map objectives. Generally Enemy Territory 
+			involves a lot more objectives and constantly maintaining these images during 
+			the development of the maps was time consuming and resource-hungry.
+			<p>
+			The solution was to create a virtual camera system which could be setup to 
+			point at objectives or spawn areas throughout the map. As dynamic objectives 
+			were used for the escort-a-tank missions, the system was also extended to allow 
+			chase cameras as well.
+			<p>
+			Below is a screenshot from the Limbo menu featuring the various command map 
+			icons, filters down the right and the objective description/camera viewpoint 
+			along the bottom.
+			<p>
+				<table align="left" cellpadding="4px">
+					<tr>
+						<td>
+							<img src="images/objcameras_1.jpg"></td>
+					</tr>
+				</table>
+			When the player clicks on the spawnpoint icons on the command map the game will 
+			update the camera viewpoint at the bottom of the screen.
+			<p>
+			When the player cycles through the objectives with the up and down arrows the 
+			camera will change to reflect what they are looking at.
+			<p>
+			Critical objectives will make the icon pulsate slowly so players know they are 
+			important and they can find them on the command map easier.
+			<p>
+				The objective camera entity
+				<span class="code">info_limbo_camera</span>
+			has to target another entity; otherwise Enemy Territory will not load the map. 
+			This is something to be careful of if you region compile maps. (You can add 
+			entities to compiled maps with the "-onlyents" option.)
+			<p>
+				To create a spawn room camera you will need to setup the
+				<span class="code">info_limbo_camera</span>
+				entity to target the
+				<span class="code">team_WOLF_objective</span>
+				entity. Also remember to give the
+				<span class="code">info_limbo_camera</span>
+			entity a targetname so that it can be removed from the game if need be. Often 
+			forward spawn areas are removed in LMS.
+			<p>
+				For each objective in the map you will need to create an
+				<span class="code">info_limbo_camera</span>
+				entity and target it at an
+				<span class="code">info_null</span>
+				entity. The info_null is used as the direction the camera will be looking. The
+				<span class="code">info_limbo_camera</span>
+			entity must also have an objective key which tells the game what camera is 
+			looking at what objective.
+			<p>
+				The final use for the
+				<span class="code">info_limbo_camera</span>
+				entity is to follow a moving objective like for example the tank in Goldrush or 
+				Fueldump. In the map Fueldump the tank (<span class="code">script_mover</span>
+			entity) is made from various clip brushes which all the camera entities target.
+			<p>
+				At various points on the tanks journey are
+				<span class="code">info_limbo_camera</span>
+			entities which are used to watch the tank. They all target the tank entity 
+			regardless of how far away they are from the tank initially.
+			<p>
+				As the tank (<span class="code">script_mover</span>) goes past each
+				<span class="code">info_limbo_camera</span>
+			entity, the camera viewpoint on the limbo menu focuses on the tank during its 
+			journey. The camera will pan around and watch the tank at all times.
+			<p>
+				Which ever
+				<span class="code">info_limbo_camera</span>
+				entity the tank (<span class="code">script_mover</span>) is closest to, will be 
+				used as the current camera location. With some clever placement of the
+				<span class="code">info_limbo_camera</span>
+			entities you can create some really cool angles. In the map 'Goldrush' the tank 
+			is shown rolling over the bridge towards the market, but from the angle of 
+			someone standing in the courtyard in front of the bank. </font>
+		<p>
+			<span class="maintitle">Description Text</span><br>
+		All the objective/map text is stored in a separate file called '&lt;map 
+		name&gt;.objdata' in the 'maps' folder. This was done because some of the 
+		objective text needed was special international characters.
+		<p>
+			The first 3 lines of the file deal with the text for Axis/Allied/Spectator 
+			teams. These lines of text are referred to as objective 0 by the
+			<span class="code">info_limbo_camera</span>
+		entities.
+		<p>
+		Each team must have an equal amount of text descriptions for each objective in 
+		the map. The total number of objectives is still set in the map script file.
+		<p>
+		Once the objectives are completed or failed they are updated with an alpha 
+		channel image stored in 'ui/assets2' called 'stamp_complete.tga' or 
+		'stamp_failed.tga'.
+		<p>
+			<span class="maintitle">News Reel</span><br>
+		Each map has a WAV file which is used to read a news bite introducing the map 
+		as if from an old style newsreel. The wav file is stored in the following area:
+		<p>
+		/sound/vo/&lt;map name&gt;/news_&lt;map name&gt;.wav
+		<p><center><img src="images/objcameras_2.jpg"></center>
+		<p>
+		All maps have a sound script file which also defines the news reel WAV file at 
+		the top. The scripts files are in the 'sound/scripts' folder and named after 
+		the map name.
+	</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Glossary</span><br>
+			<p>
+				<a class="smalltitle" name="pointentity">Entity (point)</a><br>
+			An entity refers to a point in a map where a specific object exists. These 
+			objects are defined by the entities definition file supplied with the editor 
+			tools. Entities can be made of models, specific objects or brushes.
+			<p>
+				<a class="smalltitle" name="brushentity">Entity (Brushwork)</a><br>
+				Some entities require that they are made from brushes. Some special brushwork 
+				entities require they are painted with texture/shaders from the common 
+				directory. For example: A
+				<span class="code">trigger_once</span>
+			entity would be painted with the 'trigger' shader from the common directory.
+			<p>
+				<b>All brushwork entities should contain 'origin' brushes.</b>
+			<p>
+			Brushwork entities can also be areas in a map which the player can enter and 
+			the game performs a certain event depending on what the entity does.
+			<p>
+				<a class="smalltitle" name="key">Key</a><br>
+				All entities have keys which define characteristics of the entity. Examples of 
+				these keys are
+				<span class="code">classname</span>,
+				<span class="code">targetname</span>,
+				<span class="code">target</span>
+			, etc.
+			<p>
+				<a class="smalltitle" name="value">Value</a><br>
+			All entity keys should have a value by default, whether it is a number or 
+			string. These values are usually defined / explained in the entities 
+			description box of the editor.
+			<p>
+				<a class="smalltitle" name="spawnflag">Spawnflag</a><br>
+			A special key defined by a particular set of check boxes in the entity 
+			definition dialog box. The selection of the checkboxes usually represents 
+			binary values in the final key value.
+			<p>
+				<a class="smalltitle" name="triggering">Triggering an Entity</a><br>
+				To trigger an entity is to activate a certain state / specific function and it 
+				varies from entity to entity. With spawnpoint entities they will be turn on or 
+				off, while a
+				<span class="code">func_explosion</span>
+			will simple explode and be removed from the game. The only disadvantage to 
+			triggering entities is that you cannot set the state of an entity to a specific 
+			value with the trigger function.
+			<p>
+				In order to trigger an entity it must have a
+				<span class="code">targetname</span>
+				key/value so that the script system can refer to it. It's a good idea to make 
+				the
+				<span class="code">targetname</span>
+			values more meaningful and not rely on the default 'txxxx' name system of the 
+			editor. It can help with debugging of the map / script later on.
+			<p>
+				<a class="smalltitle" name="pvs">PVS (Potentially Visible Set)</a><br>
+			PVS is the set (group) of areas in a map which may or may not be visible from 
+			the position at which you are currently standing. Each area is a convex volume, 
+			the same as a brush is.
+			<p>
+				<a class="smalltitle" name="routine">Scripting - Routine</a><br>
+				The script file is made up of routines which define what various entities do 
+				and how they react to game events. Each entity in the map has the possibility 
+				to run a routine in the script file. To enable an entity to run a routine in 
+				the script file give the entity a
+				<span class="code">targetname</span>
+				and
+				<span class="code">scriptname</span>
+			key with relevant values.
+			<p>
+				<a class="smalltitle" name="function">Scripting - Function</a><br>
+				Each entity routine is broken down into functions which are triggered by 
+				various events which affect the entity. For example: The function 'spawn' is 
+				triggered when the entity is spawned into the map at the beginning of the game. 
+				Certain functions exist for all entities regardless of what type they are. The 
+				standard functions are 'spawn', 'trigger', 'pain', 'death'. Some entities have 
+				further functions which are specific to what they do in game. For example: The
+				<span class="code">func_constructible</span>
+			entity has the following unique functions: 'built', 'buildstart', 'decayed', 
+			'destroyed' which are used when certain events happen involving that entity 
+			type in game.
+			<p>
+				<a class="smalltitle" name="variables">Scripting - Variables</a><br>
+				The scripting system supports the ability to keep track of variables or values. 
+				The system has local and global variables and each are referenced differently. 
+				The scripting system refers the keywords
+				<span class="code">accum</span>
+				and
+				<span class="code">globalaccum</span>
+			to mean variables. There is plenty of ways of testing these variables and 
+			making scripting decisions based on their values.
+			<p>
+				<a name="localvar"><b>Local</b></a><br>
+				Each routine can define 8 local variables (<span class="code">accum</span>) 
+				which can be used by the routine for keeping track of local conditions. For 
+				example, if the entity routine is a button, a local variable could keep track 
+				of if the button is on or off. No other routines in the script can access these 
+				local variables (<span class="code">accum</span>
+			).
+			<p>
+				<a name="globalvar"><b>Global</b></a><br>
+				Each script can define 10 global variables (<span class="code">globalaccum</span>) 
+				which can be used by any routine within the script. For example, the Battery 
+				script keeps track of the door generators by use of a global variable. Several 
+				routines in the script reference the state of this variable (<span class="code">globalaccum</span>
+				) to determine what state the generator is in. Built or destroyed.
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+		</font>
+	</body>
+</html>

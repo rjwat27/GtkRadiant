@@ -1,0 +1,65 @@
+// project template
+// the __* strings will be expanded following these rules:
+// __ENGINEPATH: path to the engine .. C:\quake3\ C:\Program Files\Quake III Arena\ /usr/local/games/quake3/
+// __TOOLSPATH: path to the tools directory C:\quake3\tools /usr/local/games/quake3/tools
+//   (NOTE: on win32 tools directory is usually where the editor is .. but it's not true on linux)
+// __USERHOMEPATH: on linux, the directory with write permissions for saving maps etc.
+//   on win32, == __ENGINEPATH
+{
+"version" "4"
+
+"basepath" "__ENGINEPATHmain"
+"rshcmd" ""
+"remotebasepath" "__ENGINEPATHmain"
+"entitypath" "__TOOLSPATH"
+"texturepath" "__ENGINEPATHmain/textures"
+"autosave" "__USERHOMEPATHmain/maps/autosave.map"
+"mapspath" "__USERHOMEPATHmain/maps"
+
+"bsp_-light" "! __TOOLSPATHq3map # -game wolf -onlyents $ && ! __TOOLSPATHq3map # -game wolf -light $"
+"bsp_-light -extra" "! __TOOLSPATHq3map # -game wolf -onlyents $ && ! __TOOLSPATHq3map # -game wolf -light -extra $"
+"bsp_BSP" "! __TOOLSPATHq3map # -game wolf $"
+"bsp_BSP -onlytextures" "! __TOOLSPATHq3map # -game wolf -onlytextures $"
+"bsp_BSP -onlyents" "! __TOOLSPATHq3map # -game wolf -onlyents $"
+"bsp_BSP, -vis -fast" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis -fast $"
+"bsp_BSP, -vis -fast, -light -extra" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis -fast $ && ! __TOOLSPATHq3map # -game wolf -light -extra $"
+"bsp_BSP, -vis" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis $"
+"bsp_BSP, -vis -fast, -light" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis -fast $ && ! __TOOLSPATHq3map # -game wolf -light $"
+"bsp_BSP, -vis, -light" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis $ && ! __TOOLSPATHq3map # -game wolf -light $"
+"bsp_BSP, -vis, -light -extra" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis $ && ! __TOOLSPATHq3map # -game wolf -light -extra $"
+
+"bsp_-vlight only" "! __TOOLSPATHq3map # -game wolf -onlyents $ && ! __TOOLSPATHq3map # -game wolf -vlight $"
+"bsp_BSP, -vis -fast, -vlight" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis -saveprt -fast $ && ! __TOOLSPATHq3map # -game wolf -vlight $"
+"bsp_BSP, -vis, -vlight" "! __TOOLSPATHq3map # -game wolf $ && ! __TOOLSPATHq3map # -game wolf -vis -saveprt $ && ! __TOOLSPATHq3map # -game wolf -vlight $"
+
+// additions to default project file for q3map2
+
+"bsp_Q3Map2: (single) BSP -meta" "! __APPPATHq3map2 -v # -game wolf -meta $"
+
+"bsp_Q3Map2: (single) -vis" "! __APPPATHq3map2 # -game wolf -vis $"
+
+"bsp_Q3Map2: (single test) -vis -fast" "! __APPPATHq3map2 # -game wolf -vis -fast $"
+
+"bsp_Q3Map2: (single test) -light -faster" "! __APPPATHq3map2 -v # -game wolf -light -faster $"
+
+"bsp_Q3Map2: (single test) -light -fast" "! __APPPATHq3map2 -v # -game wolf -light -fast $"
+
+"bsp_Q3Map2: (single) -light -fast -super 2" "! __APPPATHq3map2 -v # -game wolf -light -fast -super 2 $"
+
+"bsp_Q3Map2: (single) -light -fast -super 2 -filter" "! __APPPATHq3map2 -v # -game wolf -light -fast -super 2 -filter $"
+
+"bsp_Q3Map2: (single) -light -fast -super 2 -filter -bounce 8" "! __APPPATHq3map2 -v # -game wolf -light -fast -super 2 -filter -bounce 8 $"
+
+"bsp_Q3Map2: (test) BSP -meta, -vis, -light -fast -filter" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt $ && ! __APPPATHq3map2 -v # -game wolf -light -fast -filter $"
+
+"bsp_Q3Map2: (test) BSP -meta, -vis -fast, -light -fast -super 2 -filter" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt -fast $ && ! __APPPATHq3map2 -v # -game wolf -light -fast -super 2 -filter $"
+
+"bsp_Q3Map2: (final) BSP -meta, -vis, -light -fast -filter -super 2" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt $ && ! __APPPATHq3map2 -v # -game wolf -light -fast -filter -super 2 $"
+
+"bsp_Q3Map2: (final) BSP -meta, -vis, -light -fast -filter -super 2" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt $ && ! __APPPATHq3map2 -v # -game wolf -light -fast -filter -super 2 $"
+
+"bsp_Q3Map2: (final) BSP -meta, -vis, -light -fast -filter -super 2 -bounce 8" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt $ && ! __APPPATHq3map2 -v # -game wolf -light -fast -super 2 -filter -bounce 8 $"
+
+"bsp_Q3Map2: (simulate old style -light -extra) BSP -meta, -vis, -light -super 2" "! __APPPATHq3map2 -v # -game wolf -meta $ && ! __APPPATHq3map2 # -game wolf -vis -saveprt $ && ! __APPPATHq3map2 -v # -game wolf -light -super 2 $"
+
+}

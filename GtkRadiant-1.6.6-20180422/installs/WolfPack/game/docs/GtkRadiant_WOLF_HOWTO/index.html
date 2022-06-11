@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>                    
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">                
+  <title>GtkRadiant and Return To Castle Wolfenstein</title>
+  <style TYPE="text/css">
+  <!--
+    a:link    { color: #9999FF ; text-decoration: none ; }
+    a:visited { color: #6666AA ; text-decoration: none ; }
+    a:hover   { color: #6666FF ; text-decoration: none ; }
+    h3        { color: #FFFFFF ; }
+    b         { color: #CCCCCC ; }
+    i         { color: #888888 ; font-size: 10pt ; }
+  //-->
+  </style>
+</head>
+
+<body bgcolor="#000000" text="#BBBBBB">
+
+<div align="center">
+<table width="95%" cellpadding="0" cellspacing="0" border="0"><tr><td>
+  <div align="center">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr><td bgcolor="#003366" align="center">
+      <h3>GtkRadiant and Return To Castle Wolfenstein<br>Getting Started Guide</h3>
+    </td></tr>
+  </table>
+  </div>
+  
+  <p>
+    <b>Table of Contents</b>
+    <ol>
+    - <a href="#intro">
+      Introduction
+    </a><br>
+    - <a href="#games">
+      Multiple games support in GtkRadiant
+    </a><br>
+    - <a href="#project">
+      Project settings for RTCW
+    </a><br>
+    - <a href="#monitor">
+      Compiling and running your maps
+    </a><br>
+    - <a href="#bspc">
+      BSPC, prepare the map for single player AIs
+    </a><br>    
+    - <a href="#help">
+      Troubleshooting
+    </a><br>
+    </ol>
+  </p>
+  
+  <p>
+    <b><a name="intro">Introduction</a></b>
+    <p>
+    The purpose of this document is to highlight the parts of <b>GtkRadiant</b> which have changed
+    in the new version 1.2. We also discuss the basics of level editing for 
+    <b>Return To Castle Wolfenstein</b>. This is not the GtkRadiant manual, or a mapping howto though.
+    (those topics are covered in other help documents, and on websites).
+  
+  <p>
+    <b><a name="games">Multiple games support in GtkRadiant</a></b>
+    <p>
+    GtkRadiant supports level editing for multiple games through a central installation
+    and some game specific packages. In the case of <b>Return To Caslte Wolfenstein</b> for instance,
+    the editor installs in <i>C:\Program Files\GtkRadiant</i> and puts the game package
+    in <i>C:\Program Files\Return To Castle Wolfenstein\Radiant</i> (these are default
+    paths on win32, your mileage may vary).
+    </p>
+    
+    <p>
+    When you execute the editor from the Start Menu, it will look for installed game packages.
+    If only one game pack is present, then it will start loading for this game directly,
+    otherwise it will prompt you with the <b>general preferences</b> dialog, asking you
+    which game you want to edit for.
+    </p>
+    
+    <p>
+    <div align="center">
+      <img src="game1.png">
+      <img src="game2.png">
+      <br>
+      <i>Game selection dialog</i>
+    </div>    
+    </p>
+    
+    <p>
+    The files describing which game packs are installed and where are in the 
+    <i>C:\Program Files\GtkRadiant\games</i> folder. They are created during setup to
+    match your particular settings.
+    </p>
+    
+  </p>
+  
+  <p>
+    <b><a name="project">Project Settings for RTCW</a></b>
+    <p>
+    Once you have selected <b>Return To Castle Wolfenstein</b>, the editor will continue
+    loading using RTCW configuration. If it is the first run, it will create a default
+    project configuration for you. You can view and edit your project configuration from
+    the <b>Files > Project settings...</b> menu.
+    </p>
+    
+    <p>
+    <center>
+    <img src="project.png">
+    <br>
+    <i>Project settings dialog in RTCW mode</i>
+    </center>
+    </p>
+    
+    <p>
+    The only thing you should have to modify in the project settings is the mapping mode
+    combo menu. Select the right configuration depending wether you are doing single 
+    player maps or multiplayer maps. For instance this will change how 
+    <b>Return To Castle Wolfenstein</b> is executed after you compile a map.
+    </p>
+    
+    <p>
+    A bit more of information about the project files: those are .qe4 files in 
+    <i>C:\Program Files\Return To Castle Wolfenstein\main\scripts</i>. There is a very
+    particular file there, 
+    <i>quakev2.qe4</i> which Radiant uses to generate your actual project. You should 
+    never modify this file unless you know what you are doing. The project files that 
+    Radiant uses for everyday run are the <i>user*.qe4</i> files.
+    </p>
+  </p>
+  
+  <p>
+    <b><a name="monitor">Compiling and running your maps</a></b>
+    <p>
+    Any map (i.e. <i>.map</i> file) needs to be 'compiled' into a <i>.bsp</i> file in order to
+    be loaded into the engine. This is done by <b>q3map</b>, a compiling utility. <b>GtkRadiant</b>
+    provides two ways of compiling maps. It can be done non-interactively by generating a batch file,
+    or you can use the <i>monitored</i> mode. This is configured from the 
+    <b>Edit > Preferences...</b> menu, in the <b>BSP monitoring</b> tab.
+    </p>
+    
+    <p>
+    <center>
+    <img src="monitor.png">
+    <br>
+    <i>BSP monitoring preferences</i>
+    </center>
+    </p>
+    
+    <p>
+    When you run a monitored compilation, you can follow the progress of q3map in the editor console.
+    If the compilation fails becuase of errors in your map, you will be able to get a clean error message
+    and in some cases, a debug window will popup which will help you locate the problem.
+    You can also tell the editor to run the map in the engine when the compilation is done (with
+    some 3D board you may have to turn on "activate sleep mode" so that you have enough OpenGL resources
+    to run the engine)
+    </p>
+    
+    <p>
+    Also note that several sample maps (namely <i>mp_beach</i>, <i>escape1</i> and <i>escape2</i>)
+    are provided in the setup. Those are a great source for learning.
+    </p>
+  </p>
+  
+  <p>
+    <b><a name="bspc">BSPC, prepare the map for single player AIs</a></b>
+    <p>
+    If you are doing a single player map, you will need to build two .aas files,
+     so that the AIs know were to run. For instance, if you map is <i>foo.map</i>,
+    you will compile <i>foo.bsp</i> with <b>q3map</b>, and with <b>bspc</b> you will have to produce
+    <i>foo_b0.aas</i> and <i>foo_b1.aas</i>. You can create a batch file to help the process
+    (BSPC compiling is not integrated into GtkRadiant atm):
+    </p>
+    <p>
+    <pre>
+@echo off
+setlocal
+
+rem Enable this next line to compile maps without debug info (put in a rem to enable debug info)
+rem set extraparms=-optimize
+
+bspc -threads 1 -ext _b0 -cfg aascfg_sm.c -bsp2aas ..\main\maps\%1.bsp -output ..\main\maps %extraparms%
+copy bspc.log temp_b0.log
+bspc -threads 1 -ext _b1 -cfg aascfg_lg.c -bsp2aas ..\main\maps\%1.bsp -output ..\main\maps %extraparms%
+copy bspc.log temp_b1.log
+    </pre>
+    </p>
+    <p>
+    <b>IMPORTANT Q3MAP2 NOTE:</b> If you are using q3map2 to compile the map, add <b>-forcesidesvisible</b>
+    to the bspc options.    
+    </p>
+  </p>
+
+  <p>
+    <b><a name="help">Troubleshooting</a></b>
+    <p>
+    If the editor doesn't work correctly, make sure that your installation is not broken,
+    i.e. you have installed newer version above an older one, or you are trying to use
+    and editor binary with incompatible modules and tools (i.e. that came from other sources).    
+    </p>
+    <p>
+    Carefully examine the console of the editor for any error and warning messages. Some
+    important things are happening while the editor is starting, before the console is available,
+    this is why it is possible to have Radiant log everything to a radiant.log file (which
+    will be in <i>C:\Program Files\GtkRadiant\radiant.log</i>). You can turn logging on
+    from the preferences menu.
+    </p>
+    <p>
+    If that fails, see the links page that comes with GtkRadiant setup to find forums and help.
+    In the editor, the <b>Help</b> menu provides a number of useful shortcuts.
+    </p>
+  </p>
+  
+  <div align="center">
+  <table width="100%" cellpadding="1" cellspacing="0" border="0">
+    <tr><td bgcolor="#003366" align="right">
+      <i>Last updated: Jan 22, 2002 &nbsp;</i>
+    </td></tr>
+  </table>
+  </div>
+
+</tr></td></table>
+</div>
+
+
+</body>
+</html>

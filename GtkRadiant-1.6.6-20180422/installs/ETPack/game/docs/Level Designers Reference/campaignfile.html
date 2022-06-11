@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Campaign File</span><br>
+			The campaign file will allow multiple maps to be played as one session using 
+			the Experience (XP) system to reward players for completing objectives and 
+			playing as a team member. The campaign files are located in the 'scripts' 
+			folder. Here is a sample image of the host game UI screen.
+			<p>
+				<center><img src="images/campaign.jpg"></center>
+			<p>
+			The campaign script file contains the following keys:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">name:</td>
+						<td>The name to appear in the UI campaign select box.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">shortname:</td>
+						<td>Used to start the campaigns from the console (campaign command).</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">description:</td>
+						<td>Used to describe the campaign on the host game UI.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">maps:</td>
+						<td>A list of maps in the campaign separated by semicolons.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">mapTC:</td>
+						<td>The map offset on the big map image. The current onscreen map window is only 
+							650x650 pixels. This allows the map pins to be more central located in the 
+							onscreen map window.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">type:</td>
+						<td>Only one type supported, 'wolfmp'.</td>
+					</tr>
+				</table>
+			<p>
+				<b>/listcampaigns</b><br>
+			Will search the 'scripts' folder for all campaign scripts and list their 
+			shortnames.
+			<p>
+				<b>/campaign</b><br>
+			This will start a campaign from the console using the shortnames listed above 
+			in the /listcampaigns command. </font>
+	</body>
+</html>

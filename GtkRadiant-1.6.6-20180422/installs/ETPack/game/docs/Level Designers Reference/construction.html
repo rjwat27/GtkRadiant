@@ -1,0 +1,834 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Construction System</span><br>
+			The design goal for the construction system was to introduce basic RTS style 
+			game-play to the multiplayer Wolfenstein universe. The construction system was 
+			designed to be as flexible as possible by having support for multiple stages 
+			which can be created from either game models or brushwork.
+			<p>
+			The ability to build constructions is an enhanced feature of the engineer 
+			class. Engineers are able to construct objects within maps such as bridges, 
+			guard towers and gun emplacements in predefined locations. The construction 
+			locations should be marked by the crates model so that everyone can recognise a 
+			construction point in the map.
+			<p>
+			Each construction will have a construction class which defines how much 'charge 
+			bar' time is required to complete each stage of the construction. The speed at 
+			which an item can be constructed can be increased with additional Engineers.
+			<p>
+			While the construction is being built a translucent representation of the 
+			object will appear and then become solid when built. If a player is in the 
+			construction area while being built they will be warned to leave the area 
+			before the construction is finished. Players failing to leave the construction 
+			zone will be killed the instant the construction is complete.
+			<p>
+			A construction object which has not finished or been touched by an engineer 
+			will decay after 30 seconds (current default) to its previous deconstructed 
+			'crates' state. Multiple stage constructions will decay back to their previous 
+			built stage.
+			<p>
+			Once the construction has been built by one team, only the opposing team can 
+			damage it. The construction class of the construction object dictates how it 
+			can be destroyed. Friendly fire will not apply to constructed objects.
+			<p>
+				<a class="maintitle" name="conclasses">Construction Classes</a><br>
+			Most of the construction system's functionality is located in the scripting 
+			system and only the basic parameters are present in the maps. This could 
+			present a problem for Level Designers who have had very little experience of 
+			scripting but the existing maps do offer a lot of workable examples to study if 
+			you're unsure.
+			<p>
+			The construction system has 6 variables which can affect the way a 
+			constructible object will work in-game. These variables are also organized into 
+			3 presets so that construction objects can be consistent across all maps. The 
+			main difference between each of the construction presets is the 'charge bar' 
+			times and the type of explosives that can damage the object.
+			<p>
+			The largest construction objects in the game were given the highest 'charge 
+			bar' value so that it would encourage the engineers to work together on 
+			completing objectives. The preset value of a construction should reflect its 
+			importance to the overall map objectives. The only exception to the rule is the 
+			escorted tanks which have a high health value and can be damaged by all 
+			explosives.
+			<p>
+			All constructible items must have the construction class (preset) defined upon 
+			spawning in the map. Further construction parameters can be changed after the 
+			construction class has been defined. The following table highlights the presets 
+			and what values they use.
+			<p>
+				<table>
+					<tr bgcolor="#000000">
+						<td class="gensmallwhite">Construction Class (preset)</td>
+						<td class="gensmallwhite">Charge Bar Req.</td>
+						<td class="gensmallwhite">Construct XP Bonus</td>
+						<td class="gensmallwhite">Destruct XP Bonus</td>
+						<td class="gensmallwhite">Health</td>
+						<td class="gensmallwhite">Weapon Class</td>
+						<td class="gensmallwhite">Duration (msec)</td>
+						<td class="gensmallwhite">Icon</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>1</td>
+						<td>0.5</td>
+						<td>5</td>
+						<td>5</td>
+						<td>350</td>
+						<td>1*</td>
+						<td>2500</td>
+						<td class="gensmall">Grenade</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>2</td>
+						<td>1</td>
+						<td>7.5</td>
+						<td>7.5</td>
+						<td>N/A</td>
+						<td>2*</td>
+						<td>5000</td>
+						<td class="gensmall">Satchel Charge</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>3</td>
+						<td>1.5</td>
+						<td>10</td>
+						<td>10</td>
+						<td>N/A</td>
+						<td>3*</td>
+						<td>2500</td>
+						<td class="gensmall">Dynamite</td>
+					</tr>
+				</table>
+				<span class="gensmall">
+				1* = All Explosives (Dynamite, Satchel Charge, Grenades, Panzerfaust, Mortars, Air Strike, etc.)<br>
+				2* = Dynamite, Satchel Charge<br>
+				3* = Dynamite Only
+				</span>
+			<p>
+			Please note that constructible_health only applies to construction class 1 
+			because the other values are instantly destroyed by satchel or dynamite 
+			explosions.
+			<p>
+			The script commands below match the columns of the table above.
+			<p><span class="code">
+				constructible_chargebarreq<br>
+				constructible_constructxpbonus<br>
+				constructible_destructxpbonus<br>
+				constructible_health<br>
+				constructible_weaponclass<br>
+				constructible_duration
+				</span>
+			<p>
+			For example, if a tank takes a lot of damage and can be damaged by anything 
+			from grenades upwards, the following spawn settings would be used:
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							example_tank<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;spawn {<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_class 1<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_health 1200<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<a class="maintitle" name="newents">New Entities</a><br>
+				All constructible objectives have a core set of entities which are used 
+				everytime regardless of construction configuration. Each construction objective 
+				must contain at least one
+				<span class="code">func_constructible</span>
+				and one
+				<span class="code">trigger_objective_info</span>
+			entity both linked together.
+			<p>
+				Neutral team construction objectives contain two
+				<span class="code">func_constructible</span>
+				entities because both teams cannot own the same construction entity. The
+				<span class="code">trigger_objective_info</span>
+				entity targets both
+				<span class="code">func_constructible</span>
+			entities.
+			<p>
+				<span class="smalltitle">func_constructible</span><br>
+				The
+				<span class="code">func_constructible</span>
+				is the primary entity which specifies which team can build or destroy the 
+				construction. The
+				<span class="code">func_constructible</span>
+				is a <a href="glossary.html#brushentity">brushwork entity</a> and <b>must</b>
+			contain an origin brush; otherwise it will cause problems with the planting of 
+			dynamite.
+			<p>
+				When a team plants explosives next to a construction objective the
+				<span class="code">func_constructible</span>
+				defines where the explosives can be planted. Because some explosives have a 
+				wide damage radius be careful not to create
+				<span class="code">func_constructible</span>
+			entities too close to each other.
+			<p>
+				The
+				<span class="code">func_constructible</span>
+				entity has the following <a href="glossary.html#keys">keys</a>
+			:
+			<p>
+				<table>
+					<tr>
+						<td>targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td>scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td>track:</td>
+						<td>Construction group function.</td>
+					</tr>
+					<tr>
+						<td>wait, score, health:</td>
+						<td>Not used anymore (replaced with script commands).</td>
+					</tr>
+					<tr>
+						<td>constages:</td>
+						<td>List of construction
+							<span class="code">func_brushmodel</span>
+							entities.</td>
+					</tr>
+					<tr>
+						<td>constages:</td>
+						<td>List of destruction
+							<span class="code">func_brushmodel</span>
+							entities.</td>
+					</tr>
+				</table>
+			<p>
+				The track key functions like a group name. All entities with the same track key 
+				as the
+				<span class="code">func_constructible</span>
+			will be constructed at the same time. This is important if you want players to 
+			be warned to leave construction areas during the transparent stage of 
+			construction. If you set entities via the script to the transparent 
+			construction state then players will not get the warning message for 
+			construction.
+			<p>
+				The
+				<span class="code">func_constructible</span>
+				entity has the following <a href="glossary.html#spawnflag">spawnflag</a>
+			options:
+			<p>
+				<table>
+					<tr>
+						<td>start_built:</td>
+						<td>Starts built.</td>
+					</tr>
+					<tr>
+						<td>invulnerable:</td>
+						<td>Cannot be destroyed by explosives.</td>
+					</tr>
+					<tr>
+						<td>axis_constructible:</td>
+						<td>Can be built by the Axis.</td>
+					</tr>
+					<tr>
+						<td>allied_constructible:</td>
+						<td>Can be built by the Allied.</td>
+					</tr>
+				</table>
+			<p>
+				If the
+				<span class="code">func_constructible</span>
+			entity is not assigned to a team then the map will fail to load. If both teams 
+			are selected on the spawnflag then the default team will be Axis.
+			<p>
+				<b>Hint:</b> Keep in mind that some explosives have a very wide destructive 
+				radius and can be placed some distance away from the
+				<span class="code">func_constructible</span>
+			and still be effective at destroying the construction objective.
+			<p>
+				<a class="smalltitle" name="toi">trigger_objective_info (TOI)</a><br>
+				This entity is used to represent other entities (<span class="code">func_constructible</span>,
+				<span class="code">func_explosive</span>,
+				<span class="code">misc_commandmap_marker</span>
+			) on the command map. The state of the construction objective determines what 
+			icons are displayed on the command map.
+			<p>
+				The
+				<span class="code">trigger_objective_info</span>
+				is a <a href="glossary.html#brushentity">brushwork entity</a> and <b>must</b> contain 
+				an origin brush; otherwise it will appear half way between its current map 
+				position and "0 0 0" map position on the command map. The brushwork area of the
+				<span class="code">trigger_objective_info</span>
+			entity specifies where the player can build, a 'pliers' hint icon and an on 
+			screen message.
+			<p>
+				Each map is limited to a maximum of <b>18</b>
+				<span class="code">trigger_objective_info</span>
+				entities. This total usually includes command posts, health / ammo cabinets, 
+				onscreen hint areas and all constructible objectives. Some constructible 
+				objectives may <b>only</b>
+			exist in certain game types. (The map 'Fueldump' hits the TOI limit)
+			<p>
+				The
+				<span class="code">trigger_objective_info</span>
+				entity has the following <a href="glossary.html#keys">keys</a>
+			:
+			<p>
+				<table>
+					<tr>
+						<td>targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td>scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td>shortname:</td>
+						<td>Name on the command map.</td>
+					</tr>
+					<tr>
+						<td>objflags:</td>
+						<td>Used for pulsating icons on the command map.</td>
+					</tr>
+					<tr>
+						<td>track:</td>
+						<td>Onscreen text message for what you are near.</td>
+					</tr>
+					<tr>
+						<td>customimage:</td>
+						<td>Replaces the default icon for both teams.</td>
+					</tr>
+					<tr>
+						<td>customalliedimage::</td>
+						<td>Replaces the default icon for the allied team only.</td>
+					</tr>
+					<tr>
+						<td>customaxisimage:</td>
+						<td>Replaces the default icon for the axis team only.</td>
+					</tr>
+					<tr>
+						<td>infoAxis/infoAllied:</td>
+						<td>Not used anymore, do not use.</td>
+					</tr>
+					<tr>
+						<td>score:</td>
+						<td>Replaced with script commands.</td>
+					</tr>
+				</table>
+			<p>
+				The
+				<span class="code">trigger_objective_info</span>
+				entity has the following <a href="glossary.html#spawnflag">spawnflag</a>
+			options:
+			<p>
+				<table>
+					<tr>
+						<td>axis_objective:</td>
+						<td>Only works with '<span class="code">func_explosive</span>' entities.</td>
+					</tr>
+					<tr>
+						<td>allied_objective:</td>
+						<td>Only works with '<span class="code">func_explosive</span>' entities.</td>
+					</tr>
+					<tr>
+						<td>tank:</td>
+						<td>Will use a tank icon on the command map.</td>
+					</tr>
+					<tr>
+						<td>is_objective:</td>
+						<td>Will use a standard objective icon on the command map.</td>
+					</tr>
+					<tr>
+						<td>is_healthammocabinet:</td>
+						<td>Will use a health / ammo cabinet icon on the command map.</td>
+					</tr>
+					<tr>
+						<td>is_commandpost:</td>
+						<td>Will use a command post icon on the command map.</td>
+					</tr>
+				</table>
+			<p>
+				If the
+				<span class="code">trigger_objective_info</span>
+			entity does not target any other entities it will still exist in the map. The 
+			entity will still produce "You are near ." messages and if the axis/allied 
+			objective spawnflags are set, it will still interact with explosives.
+			<p>
+				Using the script command setstate the
+				<span class="code">trigger_objective_info</span>
+			entity can be switched on and off in the map for different game types. Once the 
+			entity has been switched off all relevant command map icons disappear as well.
+			<p>
+				<b>Hint:</b> Try and keep the
+				<span class="code">trigger_objective_info</span>
+				entity some distance away from the
+				<span class="code">func_constructible</span>
+			entity, so that any Engineers building the construction cannot stand in the 
+			construction area and get killed when it's complete.
+			<p>
+				<span class="smalltitle">Single Team</span><br>
+				<table align="left" cellpadding="4px">
+					<tr>
+						<td>
+							<img src="images/singleteam_1.jpg"></td>
+					</tr>
+					<tr>
+						<td>
+							<img src="images/singleteam_2.jpg"></td>
+					</tr>
+				</table>
+			The flag and construction crates mark the location of where the Engineers can 
+			build a constructible objective. Each team has specific skins for the flag and 
+			construction crates so that they are easily recognisable by all players.
+			<p>
+				<i>Construction crates and skins:</i> (
+				<span class="code">misc_gamemodel</span>
+			)
+			<p>
+				models/mapobjects/cmarker/cmarker_crates.md3<br>
+				models/mapobjects/cmarker/axis_crates.skin<br>
+			models/mapobjects/cmarker/allied_crates.skin
+			<p>
+				<i>Flag and skins:</i> (
+				<span class="code">misc_gamemodel</span>
+			)
+			<p>
+				models/mapobjects/cmarker/cmarker_flag.md3<br>
+				models/mapobjects/cmarker/axis_cflag.skin<br>
+			models/mapobjects/cmarker/allied_cflag.skin
+			<p>
+				Additional key/values for the flag model:
+				<table>
+					<tr>
+						<td>modelscale:</td>
+						<td>0.4</td>
+					</tr>
+					<tr>
+						<td>frame:</td>
+						<td>0.4 (Total amount of animation frames)</td>
+					</tr>
+					<tr>
+						<td>spawnflags:</td>
+						<td>2 (Start entity animated)</td>
+					</tr>
+				</table>
+			<p>
+				The flag and construction crate models are made from
+				<span class="code">misc_gamemodel</span>
+			entities with targetname and scriptname keys so that they can be referred to by 
+			the script.
+			<p>
+				Create a rough set of clip brushes which mirror the shape of the construction 
+				crates model. Then create an origin brush, select all the previously created 
+				clip brushes and converted them into a
+				<span class="code">func_static</span>
+				entity. Select the
+				<span class="code">func_static</span>
+			entity and set the targetname and scriptname keys so that it can be referred to 
+			by the script.
+			<p>
+				Create the constructible objective from brushwork and position it a reasonable 
+				distance from the construction crates model. Create an origin brush, select the 
+				constructible objective brushwork and convert into a
+				<span class="code">func_constructible</span>
+			entity.
+			<p>
+				<b>Note:</b> If you want to create the constructible objective from a model 
+				then use clip brushes for the
+				<span class="code">func_constructible</span>
+				instead. It's important that the
+				<span class="code">func_constructible</span>
+			entity is made from brushes because the explosive's radius has to hit 
+			something.
+			<p>
+				Select the
+				<span class="code">func_constructible</span>
+				entity and set the targetname and scriptname keys so that it can be referred to 
+				by the script and targeted by the
+				<span class="code">trigger_objective_info</span>
+			entity. Set the spawnflags to the relevant team which can construct the 
+			objective. (Only one team should be selected.)
+			<p>
+				Finally create a
+				<span class="code">trigger_objective_info</span>
+				<a href="glossary.html#brushentity">brushwork entity</a> around the 
+				construction crates model and target it at the
+				<span class="code">func_constructible</span>
+				entity. Allow enough room for the Engineers to be able to move around the 
+				construction while building. Setup all the relevant keys and spawnflags for the
+				<span class="code">trigger_objective_info</span>
+				entity as <a href="#toi">documented above</a>
+			.
+			<p>
+				<a class="maintitle" name="scripting">Scripting</a><br>
+			All constructive objectives require scripting to work. In order for Level 
+			Designers to create maps for Enemy Territory they will need to learn how to 
+			write scripts. This may be a simple case of cut and paste from the original 
+			scripts or may involve creating new script content.
+			<p>
+			In order to explain scripting this documentation defines certain words with 
+			regards to scripting. Wherever possible certain words/phrases have been 
+			hyperlinked to a glossary.
+			<p>
+			Here follows a quick primer on the how, where and what of scripting. This is by 
+			no means a complete guide to scripting but all of the maps that come with the 
+			original game do have script files which can be used as examples. Open them up 
+			and have a look .
+			<p>
+				<span class="smalltitle">Back to Basics</span><br>
+			The script file is located in the maps directory with a ".script" file 
+			extension. The script filename has to be the same as the map filename. (Eg. 
+			'oasis.bsp', 'oasis.script')
+			<p>
+			The script file is made up of routines which define what various entities do 
+			and how they react to game events. Each entity in the map has the possibility 
+			to run a routine in the script file. To enable an entity to run a routine in 
+			the script file it needs a targetname and scriptname key with relevant values.
+			<p>
+				For example:
+				<span class="code">targetname</span>, "alliedmgnest" and
+				<span class="code">scriptname</span>
+			, "alliedmgnest".
+			<p>
+			It's recommended that the targetname and scriptname values are the same so it's 
+			easier to debug the script and map for possible errors. (Technically not all of 
+			the entities require the targetname and scriptname keys to be defined but it's 
+			recommended)
+			<p>
+				Each entity <a href="glossary.html#routine">routine</a> is broken down into <a href="glossary.html#function">
+					functions</a>
+			which are triggered by various game events. For example: The function spawn is 
+			triggered when the entity is spawned into the map at the beginning of the game.
+			<p>
+				Certain <a href="glossary.html#function">functions</a>
+			exist for all entities regardless of what type they are. The standard functions 
+			are spawn, trigger, pain and death. Some entities have further functions which 
+			are specific to what they can do in game.
+			<p>
+			The script can run several entity routines at once, but each routine can only 
+			run one function at once. For example if any function uses a wait command it 
+			will stop all other functions for that entity routine. Because of this 
+			limitation several entities maybe required in order to perform several tasks at 
+			once.
+			<p>
+				Each entity routine can use / define up to 8 <a href="glossary.html#localvar">local 
+					variables</a>. These local variables cannot be referenced outside of the 
+				defining routine. The script system also supports up to 10 <a href="glossary.html#globalvar">
+					global variables</a>
+			which can be used / referenced by any routine / function in the same script.
+			<p>
+			Script variables can be used to store values which can determine if game events 
+			have been completed or what state they are currently in. For example in the map 
+			'Radar' a variable is used to count the total amount of radar parts taken from 
+			the axis base.
+			<p>
+				<span class="smalltitle">Construction Script Functions</span><br>
+				The func_constructible entity has 5 basic <a href="glossary.html#function">functions</a>
+			as defined below:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">spawn:</td>
+						<td>This function is run the first time upon starting the map. All spawn functions 
+							should have a wait command before processing any other commands because not all 
+							entities are initially ready when the map is first loaded.
+							<p>
+								All constructible items in Enemy Territory must setup their construction class 
+								when they spawn. This determines how much 'charge bar' time to be used while 
+								constructing. (There are currently 3 types of <a href="#conclasses">construction 
+									classes</a>
+							defined.)
+							<p>
+							The construction materials should be made visible (default) and the main 
+							construction elements made invisible.<p>
+						</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">buildstart:</td>
+						<td>This function is called once the construction has been started. The various 
+							construction elements are set up to be displayed in a translucent state. This 
+							shows all players where the construction is going to be built.<p>
+						</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">built:</td>
+						<td>This function is called once the construction has been finished. All 
+							construction materials are made invisible and the main construction elements 
+							are visible.
+							<p>
+						</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">decayed:</td>
+						<td>If the construction has not been touched by an engineer for 30 seconds (current 
+							default) then this function is called. The construction elements are made 
+							invisible. If this function is not defined then the construction will remain in 
+							a translucent state.<p>
+						</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">death:</td>
+						<td>This function is called once the construction has been destroyed. All 
+							construction materials are made visible and the main construction elements are 
+							made invisible.
+							<p>
+							If the construction involves a MG entity then it must be repaired by the script 
+							at this point. If the MG entity was damaged during the destruction of the 
+							construction object then the MG will be built in a damaged state.</td>
+					</tr>
+				</table>
+			<p>
+				The backbone of the construction system is one script command called
+				<span class="code">setstate</span>
+			. This command allows entities to be switched into 3 different states of 
+			'default / invisible / underconstruction'. Combined with the various functions 
+			defined above the construction system is not overly complex to setup.
+			<p>
+				<a class="maintitle" name="neutralteam">Neutral Team</a><br>
+				A neutral construction is no different to a single stage construction except 
+				there is one for each team, both linked to one
+				<span class="code">trigger_objective_info</span>
+				entity. The
+				<span class="code">func_constructible</span>
+			entity can only be associated to one team so neutral constructions need two 
+			constructible entities.
+			<p>
+				It is recommended that both team constructions are different so that the 
+				players can easily tell from a distance who built the construction in the first 
+				place. The
+				<span class="code">trigger_objective_info</span>
+				entity controls which
+				<span class="code">func_constructible</span>
+			is built and which script routine is active.
+			<p>
+				<a class="maintitle" name="multistage">Multiple Stages</a><br>
+			The construction system can support up to 3 different stages for construction 
+			(stage1, stage2, final) and 2 different stages for destruction. Depending on 
+			which happens to the func_constructible depends on which stage will be active 
+			as the diagram below illustrates:
+			<p>
+				<center><img src="images/construct.jpg"></center>
+			<p>
+			The best way to make a multiple staged construction is to create the final 
+			object first and set it up like a single staged construction. Once you have a 
+			single stage construction working then add more stages to it.
+			<p>
+			Multiple stage constructions use two new keys for the func_constructible 
+			entity.
+			<p>
+				<table>
+					<tr>
+						<td>constages:</td>
+						<td>List of construction
+							<span class="code">func_brushmodel</span>
+							entities.</td>
+					</tr>
+					<tr>
+						<td>constages:</td>
+						<td>List of destruction
+							<span class="code">func_brushmodel</span>
+							entities.</td>
+					</tr>
+				</table>
+			<p>
+				All additional construction/destruction stages need to be setup as
+				<span class="code">func_brushmodel</span>
+				entities with
+				<span class="code">targetname</span>
+				key. The value of the targetname key will appear in the
+				<span class="code">constages</span>
+				or
+				<span class="code">desstages</span>
+			lists.
+			<p>
+				For example if the construction stage 1 and 2 entities have
+				<span class="code">targetname</span>
+				key values of 'constage1' and 'constage2', then the
+				<span class="code">constages</span>
+				key for the
+				<span class="code">func_constructible</span>
+			will have a value of 'constage1;constage2;'
+			<p>
+				<b>Note:</b> The
+				<span class="code">constages</span>,
+				<span class="code">desstages</span>
+			lists must be separated by semicolons and have no spaces. Only need to use 
+			these keys if creating multiple stage constructions.
+			<p>
+				Wherever the
+				<span class="code">func_constructible</span>
+			is in the map, all the construction/deconstruction stages will appear as well. 
+			It does not matter if you create the stages elsewhere in the map or at the same 
+			space, all stages will be displayed at the same location.
+			<p>
+			The last stage in a multiple construction is always referred to as 'final' in 
+			the script. If you are only creating a 2 stage construction then the script 
+			will use 'stage1' and 'final' only.
+			<p>
+				<span class="smalltitle">An Example Multiple Stage Construction Script</span>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							//============================================<br>
+							// Test multiple stage construction<br>
+							//============================================<br>
+							constructfinal<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;spawn<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait 200<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_class 1<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate constage1 invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate constage2 invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate constructfinal 
+							invisible<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate desstage1 invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate desstage2 invisible<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage1 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage2 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage3 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// Stage 1<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;buildstart stage1<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 1 started 
+							..."<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;built stage1<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage1 
+							invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 1 BUILT!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;decayed stage1<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage1 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 1 DECAYED!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;death<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage1 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 1 DEATH!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<b>Note:</b> The 'constructfinal' script <a href="glossary.html#routine">routine</a>
+				is the
+				<span class="code">func_constructible</span>
+				entity. The 'constage1', 'constage2', 'desstage1' and 'desstage2' are the 
+				targetname key values for the
+				<span class="code">func_brushmodel</span>
+			entities.
+			<p>
+			The 'construct_stage1', 'construct_stage2' and 'construct_stage3' are the 
+			construction materials. (The crates model and clip brushes)
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// Stage 2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;buildstart stage2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 2 started 
+							..."<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;built stage2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage2 
+							invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 2 BUILT!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;decayed stage2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage2 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 2 DECAYED!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;destroyed stage2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage2 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 2 
+							DESTROYED!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// Stage 3<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;//============================================<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;buildstart final<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 3 started 
+							..."<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;built final<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage3 
+							invisible<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 3 BUILT!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;decayed final<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage3 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 3 DECAYED!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;destroyed final<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setstate construct_stage3 
+							default<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wm_announce "Stage 3 
+							DESTROYED!"<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}
+						</td>
+					</tr>
+				</table>
+			<p>
+				<b>Note:</b> Each stage has four <a href="glossary.html#function">functions</a> 
+				which are run depending on the state of the
+				<span class="code">func_constructible</span>
+			entity. Some of the functions in this example script don't actually do anything 
+			but are included so that you can use them if you want.
+			<p>
+			The final stage of construction is always called 'final', so if you require 
+			only 2 stages of construction then only use 'stage1' and 'final' sections of 
+			the above sample script. </font>
+	</body>
+</html>

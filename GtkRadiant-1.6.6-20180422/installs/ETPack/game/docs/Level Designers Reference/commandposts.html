@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Command Posts</span><br>
+			The command post is an essential object on the map which should be constructed 
+			and carefully defended because of its tremendous benefits to 'charge bar' 
+			times. It should be placed with care on a map because it can tip the scales of 
+			balance for one team over another.
+			<p>
+			The command post comes in two different variants: individual team or neutral 
+			team. The neutral team version is the most complex to set up because it 
+			involves so many different components. The command post totally relies on 
+			scripting to work, so using the existing scripts as a template will save you 
+			loads of time.
+			<p>
+				<table>
+					<tr>
+						<td>
+							<img src="images/commandpost_1.jpg"></td>
+						<td valign="top"><b>Closed model</b><br>
+							<u>Axis</u>
+							<br>
+							models/mapobjects/radios_sd/compostaxisclosed.md3<br>
+							models/mapobjects/radios_sd/compostaxisclosed.skin<br>
+							<br>
+							<u>Allied</u>
+							<br>
+							models/mapobjects/radios_sd/compostalliedclosed.md3<br>
+							models/mapobjects/radios_sd/compostalliedclosed.skin<br>
+							<br>
+							<span class="code">Modelscale 1.5</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="images/commandpost_2.jpg"></td>
+						<td valign="top"><b>Built model</b><br>
+							<u>Axis</u>
+							<br>
+							models/mapobjects/radios_sd/compostaxisopened.md3<br>
+							models/mapobjects/radios_sd/compostaxisopened.skin<br>
+							<br>
+							<u>Allied</u>
+							<br>
+							models/mapobjects/radios_sd/compostalliedopened.md3<br>
+							models/mapobjects/radios_sd/compostalliedopened.skin<br>
+							<br>
+							<span class="code">Modelscale 1.5</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="images/commandpost_3.jpg"></td>
+						<td valign="top"><b>Damaged model</b><br>
+							<u>Axis</u>
+							<br>
+							models/mapobjects/radios_sd/compostaxisdamaged.md3<br>
+							models/mapobjects/radios_sd/compostaxisdamaged.skin<br>
+							<br>
+							<u>Allied</u>
+							<br>
+							models/mapobjects/radios_sd/compostallieddamaged.md3<br>
+							models/mapobjects/radios_sd/compostallieddamaged.skin<br>
+							<br>
+							<span class="code">Modelscale 1.5</span>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<a class="maintitle" name="entreqs">Entity Requirements</a><br>
+				The command post is essential a
+				<span class="code">func_constructible entity</span>
+			with three different models for visual representation. The command post models 
+			are setup as game_models so that they can be swapped in and out of the game 
+			easily. Each separate section of the command post has targetname and scriptname 
+			keys so that they can be referred to by the script system.
+			<p>
+				All constructible items in Enemy Territory must have a
+				<span class="code">trigger_objective_info</span>
+				entity. When the player is near the
+				<span class="code">trigger_objective_info</span>
+			entity a message is displayed on screen. Whatever is defined in the track key 
+			is used as the onscreen text message.
+			<p>
+				Important note: The
+				<span class="code">trigger_objective_info</span>
+				is a <a href="glossary.html#brushentity">brushwork entity</a>
+			and must contain an origin brush; otherwise it will appear half way between its 
+			current map position and '0 0 0' map position on the command map.
+			<p>
+				In order for the command post to appear on the command map as a constructible 
+				item it must be linked to a certain entity type. The
+				<span class="code">func_constructible</span>
+			entity tells Enemy Territory who owns the construction (Allies/Axis), what 
+			state it starts in and if it can be destroyed or not.
+			<p>
+				The
+				<span class="code">func_constructible</span>
+				entity defines where the explosives can be put by the player so that the 
+				construction is destroyed. Because of this restriction the
+				<span class="code">func_constructible</span>
+				entity is usually the same physical size as the command post when built. The 
+				clip brush used for the 'built' command post game model is setup as a
+				<span class="code">func_constructible</span>
+			entity.
+			<p>
+			For each command post game model a rough set of clip brushes will need to be 
+			created to mirror the shape of the model. All the command posts in the current 
+			Enemy Territory maps were setup with roughly the correct metal/wood clip 
+			brushes.
+			<p>
+				Once all the clip brushes have been created an origin brush will need to be 
+				added and then everything converted into a
+				<span class="code">script_mover</span>
+				entity. Because the clip brushes for the 'built' game model were used as a
+				<span class="code">func_constructible</span>
+				entity, only the 'closed' and 'damaged' clip brushes will need to be converted 
+				to
+				<span class="code">script_mover</span>
+			entities.
+			<p>
+				<span class="smalltitle">Entity summary</span><br>
+				3 command post game models (Allied, Axis and Neutral)<br>
+				1
+				<span class="code">trigger_objective_info</span>
+				entity<br>
+				1 clipbrush
+				<span class="code">func_constructible</span>
+				entity<br>
+				2 clipbrush
+				<span class="code">script_mover</span>
+				entities<br>
+				1
+				<span class="code">info_limbo_camera</span>
+			(all command posts are secondary objectives)
+			<p>
+			All the above entities need targetname and scriptname keys and with that many 
+			inter-linked entities to keep track of it can get confusing. The command posts 
+			behave in a similar way across most of the maps and if the key/values are 
+			standard then it makes referring to them in the script easier. Here is a list 
+			of standard names that were used with the command posts.
+			<p>
+				<table>
+					<tr>
+						<td>Command post models:</td>
+						<td>&lt;<i>axis/allied</i>&gt;_radio_&lt;<i>closed/built/destroyed</i>&gt;_model</td>
+					</tr>
+					<tr>
+						<td>Clipbrush entities:</td>
+						<td>&lt;<i>axis/allied</i>&gt;_radio_&lt;<i>closed/built/destroyed</i>&gt;</td>
+					</tr>
+					<tr>
+						<td>Trigger_objective_info entity:</td>
+						<td>&lt;<i>axis/allied</i>&gt;hqradio_toi</td>
+					</tr>
+				</table>
+			<p>
+				<a class="maintitle" name="scripting">Scripting for Command Posts</a><br>
+				The primary entity for controlling the construction/deconstruction of the 
+				command post is the func_constructible entity. This entity has many <a href="glossary.html#function">
+					functions</a>
+			as summarised below:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">spawn:</td>
+						<td>This function is run the first time upon starting the map. All spawn functions 
+							should have a wait command before processing any other commands because not all 
+							entities are initially ready when the map is first loaded.
+							<p>
+								All constructible items in Enemy Territory must setup their construction class 
+								when they spawn. This determines how much 'charge bar' time to be used while 
+								constructing. (There are currently 3 types of <a href="construction.html#conclasses">
+									construction classes</a>
+							defined.)</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">setup:</td>
+						<td>This is a custom trigger function which sets the initial speed at which the 
+							'charge bar' is replenished. (Called by the spawn function)</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">buildstart:</td>
+						<td>This function is called once the construction has been started. The 'destroyed' 
+							and "closed" game models are hidden and the 'built' game model is displayed in 
+							a translucent state.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">built:</td>
+						<td>This function is called once the construction has been finished. The 'built' 
+							game model is displayed and the command post features are enabled. The 'charge 
+							bar' times are adjusted, team VO updated, command post status changed and the 
+							secondary objective completed/failed for the relevant team.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">decayed:</td>
+						<td>If the construction is not completed within 30 seconds (current default) then 
+							this function is called. The construction will be reset back to a 'closed' or 
+							'damaged' game model state.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">death:</td>
+						<td>This function is called once the construction has been destroyed. The 
+							'destroyed' game model is displayed and the command post features are disabled. 
+							The 'charge bar' times are adjusted, team VO updated, command post status 
+							changed and the secondary objective reset. (The tick/cross overlay is removed)</td>
+					</tr>
+				</table>
+			<p>
+				The clip brush
+				<span class="code">script_mover</span>
+				entities are mainly controlled from the
+				<span class="code">func_constructible</span>
+			entity. They control the relevant game_models entities and switch states 
+			depending on what is happening with the command post.
+			<p>
+				Finally the 'built' game model is used for enabling/disabling the command post 
+				features. The 'charge bar' times are adjusted for all classes and the VO is 
+				updated for the relevant team. The
+				<span class="code">sethqstatus</span>
+			script command will inform all team members about landmines being close by. 
+			(Command post feature)
+			<p>
+				When the command post is constructed / damaged a sound speaker entity 
+				(positioned infront of the command post) which is enabled / disabled via the 
+				script using new commands. All the speaker sounds in the maps where placed by 
+				the <a href="speakereditor.html">new speaker sound system</a>
+			built into the game executable. </font>
+	</body>
+</html>

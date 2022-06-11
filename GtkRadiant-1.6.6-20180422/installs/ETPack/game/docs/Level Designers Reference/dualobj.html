@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Dual Objectives</span><br>
+			The map 'Radar' has the Allies trying to steal 2 experimental radar parts from 
+			the Axis base and delivering them to a waiting truck. This is a dual objective 
+			map created with a few entities and some scripting.
+			<p>
+			The command map can be 256 pixels square up to 1024 in size, the game will 
+			resize the image regardless. The command map picture (stored as a .tga) has to 
+			be created externally by a paint program of your choice. The grid size and 
+			co-ordinates are worked out from the min/max keys in the worldspawn entity for 
+			the map.
+			<p>
+				<table>
+					<tr>
+						<td>
+							<img src="images/dualobj_1.jpg"></td>
+						<td valign="top">The radar dish is a
+							<span class="code">misc_gamemodel</span>
+							entity with special animations for the dish rotation and fold up/down. The dish 
+							is metal clipped as close as possible to the fold down animation and a big 
+							player clip is put around the whole dish.
+							<p>
+								The radar box is a
+								<span class="code">team_CTF_redflag</span>
+								entity with a custom model. The radar dish is surrounded with a
+								<span class="code">trigger_objective_info</span>
+								brushwork entity that targets a
+								<span class="code">misc_commandmap_marker</span>
+							entity.</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="images/dualobj_2.jpg"></td>
+						<td valign="top">The truck is a
+							<span class="code">misc_gamemodel</span>
+							entity. The radar boxes exist in two states in the back of the truck. One 
+							version is the standard model skin and the other one is a red coloured 
+							transparent shader.
+							<p>
+								The back of the truck has a brushwork
+								<span class="code">trigger_flagonly_multiple</span>
+							entity which is setup to receive only red flags. (The stolen radar parts)
+							<p>
+								The whole of the truck is surrounded with a
+								<span class="code">trigger_objective_info</span>
+								brushwork entity that targets a
+								<span class="code">misc_commandmap_marker</span>
+							entity.</td>
+					</tr>
+				</table>
+			<p>
+				<span class="smalltitle">Scripting</span><br>
+				The script is controlled by the two radar boxes (objectives). The
+				<span class="code">team_CTF_redflag</span>
+			entity has 3 special functions: 'trigger stolen', 'trigger returned' and 
+			'trigger captured'.
+			<p>
+				When the player touches the
+				<span class="code">team_CTF_redflag</span>
+			entity the game will call the function 'trigger stolen'. The script will make 
+			the radar box model by the radar dish invisible and fold down the radar dish 
+			model.
+			<p>
+			If the player is killed and the opposite team touches the fallen radar box the 
+			game will call the function 'trigger returned'. The script will make the radar 
+			box model by the radar dish solid again and fold up the radar dish model.
+			<p>
+				When the player touches the
+				<span class="code">trigger_flagonly_multiple</span>
+			entity with the correct flag type the game calls the function 'death'. The 
+			script sets the map objective counter and checks if the game is finished or 
+			not. (It's certainly possible to have more than 2 objective flags)
+			<p>
+				The game also calls the function 'trigger captured' for the
+				<span class="code">team_CTF_redflag</span>
+			entity. The script will switch the radar boxes in the back of the truck. (Each 
+			radar box in the back of truck has a red transparent and solid version as a 
+			visual clue to the players) </font>
+	</body>
+</html>

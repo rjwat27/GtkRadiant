@@ -1,0 +1,150 @@
+<!!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Health/Ammo Cabinets</span><br>
+			The health and ammo cabinets are useful for creating fall back points in maps. 
+			These orchards of health and ammo are very important for both teams. The 
+			cabinets should be placed in areas that cannot be defended too easily.
+			<p>
+			The health and ammo cabinets have two model states: broken and operational. 
+			They could be turned into a construction item if necessary because all states 
+			exist (empty, built and damaged). The cabinets do not rely on scripting because 
+			most of their functionality is provided via the code.
+			<p>
+				<table>
+					<tr>
+						<td>
+							<img src="images/cabinet_1.jpg"></td>
+						<td valign="top"><b>Functional model</b><br>
+							<br>
+							Entities: misc_cabinet_supply, misc_cabinet_health<br>
+							<br>
+							The above entities will create the correct models in game with all the ammo and 
+							health boxes attached. The empty stands exist as models as follows:<br>
+							<br>
+							Folder: models/mapobjects/supplystands/<br>
+							Models: stand_health.md3, stand_ammo.md3<br>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img src="images/cabinet_2.jpg"></td>
+						<td valign="top"><b>Broken model</b><br>
+							<br>
+							The broken health and ammo cabinets are created in game with a misc_gamemodel, 
+							using a model key pointing at the md3. A targetname key will also allow the 
+							models to be added or removed from the game.<br>
+							<br>
+							Folder: models/mapobjects/supplystands/<br>
+							Models: stand_health.md3, stand_ammo.md3<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<a class="maintitle" name="entreqs">Entity Requirements</a><br>
+				The ammo cabinet is defined by a <a href="glossary.html#pointentity">point entity</a>
+				called
+				<span class="code">misc_cabinet_supply</span>
+			. This entity will generate the correct game model for the ammo boxes to be 
+			stored on. The game will automatically keep re-stocking the ammo over time.
+			<p>
+				The ammo cabinet is surrounded by a common/trigger <a href="glossary.html#brushentity">
+					brush entity</a> called
+				<span class="code">trigger_ammo</span>. This entity is the area in which the 
+				player has to stand in order to receive ammo. The rate and total amount of ammo 
+				the cabinet will give out is defined by the
+				<span class="code">ammototal</span>
+				and
+				<span class="code">ammorate</span>
+				keys. This entity is targeted at the
+				<span class="code">misc_cabinet_supply</span>
+			entity.
+			<p>
+				The health cabinet is defined by a <a href="glossary.html#pointentity">point entity</a>
+				called
+				<span class="code">misc_cabinet_health</span>
+			. This entity will generate the correct game model for the health boxes to be 
+			stored on. The game will automatically keep re-stocking the health over time.
+			<p>
+				The health cabinet is surrounded by a common/trigger brush entity called
+				<span class="code">trigger_heal</span>. This entity is the area in which the 
+				player has to stand in order to receive health. The rate and total amount of 
+				health the cabinet will give out is defined by the healtotal and healrate keys. 
+				This entity is targeted at the
+				<span class="code">misc_cabinet_health</span>
+			entity.
+			<p>
+				In order for the health and ammo cabinet to appear on the map a
+				<span class="code">trigger_objective_info</span>
+				entity is required. When the player is near the
+				<span class="code">trigger_objective_info</span>
+				entity a message is displayed on screen. Whatever is defined in the
+				<span class="code">track</span>
+			key is used as the onscreen text message.
+			<p>
+				Important note: The
+				<span class="code">trigger_objective_info</span>
+				is a <a href="glossary.html#brushentity">brushwork entity</a> and <b>must</b>
+			contain an origin brush; otherwise it will appear half way between its current 
+			map position and "0 0 0" map position on the command map.
+			<p>
+				The
+				<span class="code">trigger_objective_info</span>
+				entity is targeted at a
+				<span class="code">misc_commandmap_marker</span>
+				entity. This entity allows the
+				<span class="code">trigger_objective_info</span>
+				entity to appear on the command map. The
+				<span class="code">trigger_objective_info</span>
+			needs to have the correct spawnflag set 'is_healthammocabinet' so that the 
+			correct icon is displayed on the command map.
+			<p>
+				For each cabinet a rough set of clip brushes will need to be created to mirror 
+				the shape of the model. Once all the clip brushes have been created an origin 
+				brush will need to be added and then everything converted into a
+				<span class="code">script_mover</span>
+			entity.
+			<p>
+				<span class="smalltitle">Entity summary</span><br>
+				1
+				<span class="code">misc_cabinet_supply</span>
+				entity (Will create the correct game model as well)<br>
+				1
+				<span class="code">trigger_ammo</span>
+				<a href="glossary.html#brushentity">brushwork entity</a> (The trigger brush for 
+				ammo)<br>
+				1
+				<span class="code">misc_cabinet_health</span>
+				entity (Will create the correct game model as well)<br>
+				1
+				<span class="code">trigger_heal</span>
+				<a href="glossary.html#brushentity">brushwork entity</a> (The trigger brush for 
+				health)<br>
+				1
+				<span class="code">trigger_objective_info</span>
+				entity<br>
+				1
+				<span class="code">misc_commandmap_marker</span>
+				entity<br>
+				2 clipbrush
+				<span class="code">script_mover</span>
+			entities </font>
+	</body>
+</html>

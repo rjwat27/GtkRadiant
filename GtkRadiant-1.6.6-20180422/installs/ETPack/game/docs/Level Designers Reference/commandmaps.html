@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Command Maps</span><br>
+			The command map is a critical element of the game offering players the chance 
+			to keep track of objectives, other team players and where health/ammo requests 
+			are coming from. The command map is usually a 512 x 512 pixel image on which 
+			all other information is displayed.
+			<p>
+			The command map can be 256 pixels square up to 1024 in size, the game will 
+			resize the image regardless. The command map picture (stored as a .tga) has to 
+			be created externally by a paint program of your choice. The grid size and 
+			co-ordinates are worked out from the min/max keys in the worldspawn entity for 
+			the map.
+			<p>
+				Key
+				<span class="code">mapcoordsmins</span>
+				represent the top left corner (x / y map editor values).<br>
+				Key
+				<span class="code">mapcoordsmaxs</span>
+			represent the bottom right corner (x / y map editor values).
+			<p>
+				One of the easiest ways to do that is to create a square brush under your map. 
+				(Make sure it's square!) Also make sure that everything that has to be on the 
+				command map is within the bounds of the square brush. Then move the cursor over 
+				the top left corner of the brush and you will get the x / y
+				<span class="code">mapcoordsmins</span>
+				(first two values) from the little coordinate line in Radiant (bottom right). 
+				Repeat for the x / y
+				<span class="code">mapcoordsmaxs</span>
+			with the bottom right corner of the brush and you're done.
+			<p>
+				A quick way to create a <i>temporary</i> command map is to use the <a href="tracemap.html">
+					tracemap command</a>
+			and take the RED channel image and re-scale it to a 512x512 image. Here is an 
+			example of the final command map image and the RED channel image for the map 
+			'Goldrush'. (As a temporary image for the command map the red channel has basic 
+			similarities)
+			<p>
+				<table align="center" width="75%">
+					<tr>
+						<td align="center"><img src="images/commandmap_1.jpg"></td>
+						<td align="center"><img src="images/commandmap_2.jpg"></td>
+					</tr>
+				</table>
+			<p>
+				<span class="smalltitle">Adding the command map to the game</span><br>
+				For this example of how to add a command post to the game I will assume your 
+				new map is called '<b>mytest</b>
+			'. So that your map does not conflict with others maps all the files for the 
+			command should be named after your map name.
+			<p>
+				First create a square .tga image and save it as '<b>mytest</b>_cc.tga' in the 
+				'levelshots'directory. (512x512 pixels should be enough.)<br>
+				Create a new shader called '<b>mytest</b>_levelshots.shader' in the 'scripts' 
+				directory.<br>
+			Open the new shader file and create two new entries as follows:
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							levelshots/<b>mytest</b>_cc_automap<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nopicmip<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nocompress<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nomipmaps<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clampmap levelshots/<b>mytest</b>_cc.tga<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depthFunc equal<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rgbGen identity<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+						<td align="center"><img src="images/commandmap_3.jpg"></td>
+					</tr>
+				</table>
+			<p>
+				<table width="90%" align="center" ID="Table1">
+					<tr>
+						<td class="codeblock">
+							levelshots/<b>mytest</b>_cc_trans<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nopicmip<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nocompress<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;nomipmaps<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clampmap levelshots/<b>mytest</b>_cc.tga<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blendfunc blend<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rgbGen identity<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphaGen vertex<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+						<td align="center"><img src="images/commandmap_4.jpg"></td>
+					</tr>
+				</table>
+			<p>
+			The 'automap' shader is used inside of the compass on the HUD and the 'trans' 
+			shader is used for the pop-out version of the command map. The command map 
+			displayed on the Limbo menu does not require any shader features.
+			<p>
+				<span class="smalltitle">Icons on the command map</span><br>
+			At first glance the command map can look confusing but all of the relevant 
+			information is displayed in small icons which if necessary can be filtered out. 
+			The filter controls on the limbo menu also apply to the 'pop out' in game 
+			command menu.
+			<p>
+				<table>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_spawns.jpg"></td>
+						<td><b>Spawns</b><br>
+							The spawnflag icons will appear on the map where the
+							<span class="code">team_WOLF_objective</span>
+							entities are located. The text displayed on the command map for the spawn point 
+							is from the entity key
+							<span class="code">description</span>.<p>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_des.jpg"></td>
+						<td><b>Destructible</b><br>
+							If the Allied/Axis team have an objective which involves deconstructing 
+							something then a dynamite icon will appear on the map where the relevant
+							<span class="code">trigger_objective_info</span>
+							entity is. Once the objective has been destroyed then the icon will disappear 
+							from the command map.<p>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_con.jpg"></td>
+						<td><b>Constructible</b><br>
+							If the Allied/Axis team have an objective which involves constructing something 
+							then a collection of crates icon will appear on the map where the relevant
+							<span class="code">trigger_objective_info</span>
+							entity is. Once the objective has been built then the icon will disappear from 
+							the command map.<p>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_cp.jpg"></td>
+						<td><b>Command Posts</b><br>
+							Initially the command post will appear as a construction objective and then 
+							turn into a command post icon. In order for the game to know it is dealing with 
+							a command post object the
+							<span class="code">trigger_objective_info</span>
+							entity needs to have the
+							<span class="code">is_commandpost</span>
+							spawnflag set.<p>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_cab.jpg"></td>
+						<td><b>Health and Ammo Cabinets</b><br>
+							The health/ammo cabinets will always appear on the command map unless they are 
+							linked to another construction. (Eg. the tank bay in Fueldump has the 
+							health/ammo cabinet linked to the command post) In order for the game to know 
+							it is dealing with a health/ammo cabinet the
+							<span class="code">trigger_objective_info</span>
+							entity needs to have the
+							<span class="code">is_healthammocabinet</span>
+							spawnflag set.<p>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top" width="8%"><img src="images/cmicon_custom_1.jpg"><p>
+								<img src="images/cmicon_custom_2.jpg">
+						</td>
+						<td><b>Custom Icons</b><br>
+							All custom icons are stored in the 'gfx/limbo' directory and prefixed with 
+							'cm_'.
+							<p>
+								The custom icon will replace both construct/destruction states for the object. 
+								Normally the system will use crates for construct and dynamite for destruction. 
+								Because of this limitation the custom icons where mainly used for flag objects 
+								like god bars and radar parts or
+								<span class="code">func_explosive</span>
+							entities like the wall in the old city for 'Oasis'.
+							<p>
+								The following keys are used on the
+								<span class="code">trigger_objective_info</span>
+							entity to specify new custom icons for the command map:
+							<p>
+								<table>
+									<tr>
+										<td class="code">customimage:</td>
+										<td>replaces the icon for both teams</td>
+									</tr>
+									<tr>
+										<td class="code">customalliedimage:</td>
+										<td>replaces the icon for the allied team only</td>
+									</tr>
+									<tr>
+										<td class="code">customaxisimage:</td>
+										<td>replaces the icon for the axis team only</td>
+									</tr>
+								</table>
+						</td>
+					</tr>
+				</table>
+		</font>
+	</body>
+</html>

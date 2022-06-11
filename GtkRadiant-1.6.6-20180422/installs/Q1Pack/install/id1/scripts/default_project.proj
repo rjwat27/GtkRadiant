@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE project SYSTEM "dtds/project.dtd">
+<!--
+$TEMPLATEapppath: Path to GtkRadiant (e.g. C:\Program Files\GtkRadiant\)
+$TEMPLATEenginepath: Path to the game engine (e.g. C:\Program Files\Quake II\)
+$TEMPLATEexecpath: Path to the tools directory (e.g C:\Program Files\Quake2World\bin\)
+$TEMPLATEuserhomepath: Path to the per-user directory (e.g. ~/.quake2)
+$TEMPLATEbasedir: base game dir (e.g. default\)
+-->
+<project>
+  <key name="version" value="2"/>
+  <key name="basepath" value="$TEMPLATEenginepath$TEMPLATEbasedir/"/>
+  <key name="rshcmd" value=""/>
+  <key name="remotebasepath" value="$TEMPLATEenginepath$TEMPLATEbasedir/"/>
+  <key name="entitypath" value="$TEMPLATEenginepath$TEMPLATEbasedir/scripts/entities.def"/>
+  <key name="texturepath" value="$TEMPLATEenginepath$TEMPLATEbasedir/textures/"/>
+  <key name="autosave" value="$TEMPLATEuserhomepath$TEMPLATEbasedir/maps/autosave.map"/>
+  <key name="mapspath" value="$TEMPLATEuserhomepath$TEMPLATEbasedir/maps/"/>
+</project>
+

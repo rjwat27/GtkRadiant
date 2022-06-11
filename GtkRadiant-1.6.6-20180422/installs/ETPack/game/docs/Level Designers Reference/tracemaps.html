@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Trace Maps</span><br>
+			Precipitation effects and the mortar weapon require a tracemap to work. To 
+			generate a tracemap for your map run the game in developer mode (/developer 1) 
+			and type the following command '\generateTracemap'. This will generate a 
+			tracemap image (.tga) with a 256x256 pixel resolution.
+			<p>
+			The '\generateTracemap' command stores information in all of the different 
+			channels:
+			<p>
+				<table>
+					<tr>
+						<td valign="top">Red:</td>
+						<td>Top down mask (height map) of the ground surface of the upper level of the map. 
+							(A very good temporary image for the command map as it shows most map details)</td>
+					</tr>
+					<tr>
+						<td valign="top">Green:</td>
+						<td>Top down ground mask from the perspective of the sky</td>
+					</tr>
+					<tr>
+						<td valign="top">Blue:</td>
+						<td>Sky mask (The height of the sky brush from the ground)</td>
+					</tr>
+					<tr>
+						<td valign="top">Alpha:</td>
+						<td>Map brushwork present "yes/no" mask. (Physical map space)</td>
+					</tr>
+				</table>
+			<p>
+			Each channel uses all the values from 0-255 in the palette and some channel 
+			images may appear to be blank. If you adjust the gamma of the image then you 
+			will see more detail.
+			<p>
+				<table align="center" width="100%">
+					<tr>
+						<td align="right"><img src="images/tracemap_red.jpg"></td>
+						<td align="left"><img src="images/tracemap_green.jpg"></td>
+					</tr>
+					<tr>
+						<td align="right"><img src="images/tracemap_blue.jpg"></td>
+						<td align="left"><img src="images/tracemap_alpha.jpg"></td>
+					</tr>
+				</table>
+			<p>
+			If you have any thin roofs in your map, or thin walls outside, due to the 
+			resolution of the tracemap some rain or snow might fall through it. To counter 
+			this, open the tga and go to the green channel (this is the floor height the 
+			code uses). Select the area that's leaking and make it slightly brighter (if 
+			you have a pixel with brightness 130, make it 131). If it goes through walls, 
+			likely you need to put an extra pixel on the other side of the wall to fake an 
+			obstructing object there. </font>
+	</body>
+</html>

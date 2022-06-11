@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Player Spawnpoints</span><br>
+			The player spawning system in Enemy Territory has one spawn entity per team 
+			with 2 spawnflag values as follows:
+			<p>
+				<table>
+					<tr>
+						<td>Classname:</td>
+						<td class="code">team_CTF_redspawn, team_CTF_bluespawn</td>
+					</tr>
+					<tr>
+						<td>Spawnflag:</td>
+						<td class="code">invulnerable, startactive</td>
+					</tr>
+				</table>
+			<p>
+			Generally an Enemy Territory map will have an initial spawn area for both teams 
+			and possibly one or more capture/autospawn areas.
+			<p>
+			The initial spawn areas are made up of team-specific spawn entities with the 
+			spawnflag values both set so that players can start the map without being 
+			killed immediately.
+			<p>
+				The capture / autospawn areas will have Axis / Allied player spawn entities and 
+				both sets should be given a targetname key. The targetname key is used so that 
+				the game can switch the spawn entities from one state to another. Initially one 
+				set will be active and the other set will be dormant until <a href="glossary.html#triggering">
+					triggered</a>
+			via the targetname key.
+			<p>
+				Located near all spawnpoints in the game is a
+				<span class="code">team_WOLF_objective</span>
+			entity which appears on the command map, determines who owns the spawnpoint 
+			initially (If you select both spawnflag values then it WILL produce erratic 
+			results) and has a description key used by the autospawn feature.
+			<p>
+				If the spawnpoints are spread out across a wide area or in several rooms then 
+				the
+				<span class="code">team_WOLF_objective</span>
+				entity should be located somewhere in the middle of the spawnpoints. When the 
+				game spawns a player it will choose the next available spawnpoint closest to 
+				the
+				<span class="code">team_WOLF_objective</span>
+			entity. Some spawnpoints will not be used unless you have a lot of players 
+			spawning at once. All spawn areas should be designed to cope with 16 players 
+			spawning at once on each side.
+			<p>
+			The autospawn feature is designed to start players at the most forward spawn 
+			point on the map for the relevant team. As spawn areas are captured temporarily 
+			or permanently the script system needs to keep the autospawn feature up to 
+			date.
+			<p>
+				The description key is used by the autospawn system to switch the state of the
+				<span class="code">team_WOLF_objective</span>
+				entity from one team to the next. The autospawn feature is totally controlled 
+				via the script and does not switch spawnpoints around either. (You still need 
+				to <a href="glossary.html#triggering">trigger</a>
+			the spawnpoint entities as before)
+			<p>
+				The setautospawn command (used in the script) uses the description key of the
+				<span class="code">team_WOLF_objective</span>
+				entity to determine which spawn area to use, followed by a 0/1 value for which 
+				team. 0 represents Axis and 1 is for the Allied. There is no default for the 
+				setautospawn command so it needs to be setup at the beginning of the game, 
+				usually located in the
+				<span class="code">game_manager</span>
+				<a href="glossary.html#routine">routine</a>
+			of the script.
+			<p>
+				Please note that Enemy Territory maps still require the
+				<span class="code">game_manager</span>
+				entity to be present in all maps. The map script usually starts with the
+				<span class="code">game_manager</span>
+				<a href="glossary.html#routine">routine</a>
+			because it always exists in every map.
+			<p>
+				<span class="maintitle">Spawn area considerations</span><br>
+			Unfortunately there is a certain type of player who insists on disrupting 
+			online games as much as possible. These tactics range from spawn camping to 
+			door blocking and sadly these things can ruin a game for all people involved.
+			<p>
+			There is currently no way of "bumping" players out of the way in RtCW / Enemy 
+			Territory and some players on public servers insist on disrupting games by 
+			blocking doorways to / from spawn areas.
+			<p>
+				When designing spawn areas we considered the following points:
+				<ul>
+					<li>
+						If you can spare the space then create all spawn areas with at least two 
+						entrance/exits so one player cannot block a whole spawn area.</li>
+					<li>
+						If you have only one entrance / exit to a spawn area then make it at least 3 
+						players wide in order to prevent 1 player from blocking the doorway.</li>
+					<li>
+						Make sure that neither team can place landmines on the floor of the spawn area.</li>
+					<li>
+						Place all spawn entities as close as possible against a wall so that enemy 
+						players cannot stand behind the spawn entities and spawn camp.</li>
+					<li>
+						If possible place spawn areas under cover so that mortar / artillery strikes 
+						cannot affect new players joining the game.</li>
+					<li>
+						Remember to make sure all spawn entities have the spawnflag set to invulnerable 
+						so that new players are not killed instantly upon spawning into the game.</li>
+					<li>
+						Try creating spawn areas high up so that the new players have a height 
+						advantage over the opposing forces.</li>
+					<li>
+						Create multiple spawn locations for critical areas to minimize spawn camping 
+						and door blocking.</li>
+				</ul>
+			No spawnpoint is entirely spam-proof. Regardless of how many features you build 
+			into a spawn area to prevent disruptive game play, some players will always 
+			find a way to spam it. All you can do is to try and prevent as many of the most 
+			obvious problems associated with spawn areas as possible. </font>
+	</body>
+</html>

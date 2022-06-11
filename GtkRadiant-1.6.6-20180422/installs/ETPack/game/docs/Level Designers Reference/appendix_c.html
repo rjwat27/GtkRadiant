@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Appendix C: Common Textures</span><br>
+			<table width="80%">
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/caulk.jpg" border="1" alt="common/caulk"></td>
+					<td width="40%" valign="top">A structural and invisible shader. Used to create the 
+						structural 'hull' of the BSP.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/clip.jpg" border="1" alt="common/clip"></td>
+					<td width="40%" valign="top">Standard Clip brush which will block players.<br>
+						<b>No bullets or projectiles are blocked.</b></td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/hint.jpg" border="1" alt="common/hint"></td>
+					<td width="40%" valign="top">Forces additional portals in the BSP.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/clipmissile.jpg" border="1" alt="common/clipmissile"></td>
+					<td width="40%" valign="top">Based on the standard clip brush. Blocks all 
+						projectiles.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/ladder.jpg" border="1" alt="common/ladder"></td>
+					<td width="40%" valign="top">Allows players to climb up or down. Acts like player 
+						clip. It must be present on all sides of the brush.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/clipweapmetal.jpg" border="1" alt="common/clipweapmetal"></td>
+					<td width="40%" valign="top">Based on standard clip brush. Blocks all projectiles 
+						and produces a metal sound when hit by bullets.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/lightgrid.jpg" border="1" alt="common/lightgrid"></td>
+					<td width="40%" valign="top">Defines a volume where the lightgrid is active. Any 
+						space outside is not calculated.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/clipweapwood.jpg" border="1" alt="common/clipweapwood"></td>
+					<td width="40%" valign="top">Based on standard clip brush. Blocks all projectiles 
+						and produces a wood sound when hit by bullets.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/nodraw.jpg" border="1" alt="common/nodraw"></td>
+					<td width="40%" valign="top">Does not draw in game and is non solid. Used for 
+						single sided brushwork like alpha channel textures.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/terrain.jpg" border="1" alt="common/terrain"></td>
+					<td width="40%" valign="top">Terrain metashader with grass step sound.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/origin.jpg" border="1" alt="common/origin"></td>
+					<td width="40%" valign="top">Used by brushwork entities for defining their origin 
+						point in the map.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/terrain_sand.jpg" border="1" alt="common/terrain_sand"></td>
+					<td width="40%" valign="top">Terrain metashader with gravel step sound.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/skip.jpg" border="1" alt="common/skip"></td>
+					<td width="40%" valign="top">Skip is a nonsolid, invisible, structural shader that 
+						does not create BSP splits or portals. Used in conjunction with antiportals or 
+						hint faces.</td>
+					<td width="10%" align="center" valign="top"><img src="images/common/terrain_snow.jpg" border="1" alt="common/terrain_snow"></td>
+					<td width="40%" valign="top">Terrain metashader with snow step sound.</td>
+				</tr>
+				<tr>
+					<td width="10%" align="center" valign="top"><img src="images/common/trigger.jpg" border="1" alt="common/trigger"></td>
+					<td width="40%" valign="top">Used on brushwork trigger entities. It's not drawn and 
+						is not solid.</td>
+					<td width="10%" align="center" valign="top">&nbsp;</td>
+					<td width="40%" valign="top">&nbsp;</td>
+				</tr>
+			</table>
+			<p>
+			Please note that this is not a complete list of texture/shaders from the common 
+			directory but a summary of the most useful ones for producing a map for Enemy 
+			Territory. </font>
+	</body>
+</html>

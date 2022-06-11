@@ -1,0 +1,778 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Moving Object Scripting</span><br>
+			Making a moving object objective requires many interconnected entities and 
+			scripting, especially if it needs to be damageable.
+			<p>
+				<span class="smalltitle">Triggers</span><br>
+				To allow people to move the object, and see it displayed on the command map, 
+				requires a few triggers: a
+				<span class="code">trigger_multiple</span>
+				entity for movement and a
+				<span class="code">trigger_objective_info</span>
+			entity for the command map.
+			<p>
+				The <a href="glossary.html#keys">keys</a> you will need to set on the
+				<span class="code">trigger_multiple</span>
+			are:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">target:</td>
+						<td>This should be the
+							<span class="code">targetname</span>
+							of the
+							<span class="code">target_script_trigger</span>
+							entity used to control the movement, which will be described later.</td>
+					</tr>
+				</table>
+			<p>
+				You may also want to set some of the <a href="glossary.html#spawnflag">spawnflags</a>
+			, to allow only one team, or one class, the ability to move the object.
+			<p>
+				The <a href="glossary.html#keys">keys</a> you will need to set on the
+				<span class="code">trigger_objective_info</span>
+			are:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">shortname:</td>
+						<td>The name that will be displayed on the command map.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">track:</td>
+						<td>The name that will display when you are near it.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">target:</td>
+						<td>This should be the
+							<span class="code">targetname</span>
+							of the
+							<span class="code">func_constructible</span>
+							which will be used to handle damaging/repairing the object, and allow it to 
+							show on the command map.</td>
+					</tr>
+				</table>
+			<p>
+				You must set the tank <a href="glossary.html#spawnflag">spawnflag</a>
+			for this to show up correctly, and if the object is to be destroyed, the team 
+			that owns the object must be chosen from the objective spawnflags.
+			<p>
+				The
+				<span class="code">trigger_multiple</span>
+				should be a fairly large area around the object, whilst the
+				<span class="code">
+			trigger_objective_info</span>
+			should just fit around the edges, thus only allowing people to construct it 
+			when very close to it.
+			<p>
+				<span class="smalltitle">Building, Destroying and the Object Itself</span><br>
+				The object itself is made from a
+				<span class="code">script_mover</span>
+				entity. This is best made out of clip brushes, with a
+				<span class="code">model2</span>
+			key supplied to use an external md3 model.
+			<p>
+				The <a href="glossary.html#keys">keys</a>
+			you will likely want to use for this are:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">health:</td>
+						<td>The amount of damage the object can take.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">model2:</td>
+						<td>The path to an md3 that will be used to display the object.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">description:</td>
+						<td>The name that will show up when you hover your cursor over it.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">tagent:</td>
+						<td>(as in tag-ent) If using a gun, the targetname of the entity to which it will 
+							be attached. (Note: this can be the same entity)</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">gun:</td>
+						<td>The type of gun. Default is mg42, other value is; browning.
+						</td>
+					</tr>
+				</table>
+			<p>
+				There are various spawnflags which should be set, and some which must be set. 
+				You must have the
+				<span class="code">resurrectable</span>
+				flag set and in most cases you will want solid to be set as well. If the object 
+				is to be damageable, the appropriate team button should be selected for who 
+				owns the object. The compass flag should be set if the object is to show on the 
+				compass. If the object is only to be destructible using explosive weapons, the
+				<span class="code">explosivedamageonly</span>
+				flag must be set. Last of all, if you want to attach a gun to the object, the
+				<span class="code">mounted_gun</span>
+			flag must be set.
+			<p>For damage and repair of the object to work, you must have a
+				<span class="code">func_constructible</span>
+			.
+			<p>
+				The <a href="glossary.html#keys">keys</a>
+			you will need for this entity are:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+				</table>
+			<p>
+				The
+				<span class="code">start_built</span>
+			flag should be set if the object is to be 'alive' at the beginning of the map. 
+			The appropriate team should again be chosen for the team that is to own the 
+			object.
+			<p>
+				<a class="maintitle" name="miscents">Miscellaneous Entities</a><br>
+			You will also need a handful of other point entities which I will now detail.
+			<p>2
+				<span class="code">target_script_trigger</span>
+				entities<br>
+				1
+				<span class="code">func_timer</span>
+				entity<br>
+				1
+				<span class="code">target_kill</span>
+			entity
+			<p>
+				The target_script_trigger entities require the following <a href="glossary.html#keys">
+					keys</a>
+			:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The <a href="glossary.html#routine">routine</a> name in the script file.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">target:</td>
+						<td>The name of the trigger event to fire within the routine. (Note: generally this 
+							was called 'run')</td>
+					</tr>
+				</table>
+			<p>
+				One of these will be known as the disabler, the other is the enabler (This is 
+				the one pointed to by the
+				<span class="code">trigger_multiple</span>
+			entity)
+			<p>The
+				<span class="code">func_timer</span>
+			entity requires the following keys:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">target:</td>
+						<td>This should point at the other target_script_trigger entity. (Disabler)</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">wait:</td>
+						<td>"1"</td>
+					</tr>
+				</table>
+			<p>
+				It should also have the
+				<span class="code">start_on</span>
+				<span class="code">spawnflag</span>
+			set.
+			<p>The
+				<span class="code">target_kill</span>
+			entity requires the following keys:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">targetname:</td>
+						<td>The name used in the script for referencing this entity.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scriptname:</td>
+						<td>The routine name in the script file.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">target:</td>
+						<td>This should point at the func_constructible entity.</td>
+					</tr>
+				</table>
+			<p>
+				<span class="smalltitle">Scripting</span><br>
+				<center><img src="images/tankstuff.jpg"></center>
+			<p>
+			The control of the object via scripting may look complex at first, but it is in 
+			fact quite simple. The examples below are taken from the 'Fueldump' script if 
+			you wish to take a look over the whole script.
+			<p>
+			First off, you have the two script trigger routines, which tell the tank 
+			whether there is someone in the trigger or not.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							tank_disabler<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger run<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trigger tank tank_disable<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+							<br>
+							tank_enabler<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger run<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trigger tank tank_enable<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				The 'tank_enabler' routine will call the trigger run function while there are 
+				players standing within the trigger, and the 'tank_disabler' will call its 
+				trigger run function every time the
+				<span class="code">func_timer</span>
+			activates, i.e. once per second. These two functions just keep the tank object 
+			informed about players being in the trigger or not, and it will make decisions 
+			based on this information.
+			<p>
+			Now we'll take a look at what the tank does with this information.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger tank_enable<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 3 // stuck check<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 4 set 0 // reset stop counter<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 8 // reset stop check<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 2 // already following spline<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 5 abort_if_not_equal 0// are we not in a script 
+							lockout?<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 7 // death check<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// Any just started moving stuff goes here<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger tank_sound start<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 55 10 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 666<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 5 40 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 500<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self tracks_forward<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self move<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				First off, it calls the trigger 'stuck_check' function (which will be explained 
+				later), which will set bit 3 of
+				<span class="code">accum 1</span>
+			if the object is stuck. If it is stuck, it aborts, as movement is not possible.
+			<p>
+				Next, it resets the counter (<span class="code">accum 4</span>) which would 
+				stop the vehicle from moving if there was no-one there, and resets the counter 
+				that says we shouldn't be moving any more (<span class="code">accum 1 bit 8</span>
+			).
+			<p>
+			Next it aborts if we were already following a path, as you don't want the 
+			startup stuff to happen if already moving.
+			<p>
+				Next, it will abort if a script_lockout (<span class="code">accum 5</span>, 
+				more information later) is in place, or if the tank has been damaged (<span class="code">accum 1 bit 7</span>
+			).
+			<p>
+				If it passes all of these checks, then the tank has just started moving, and so 
+				it calls all the sound startup and animation startup functions. As it has some 
+				waits to have the animation work properly, a
+				<span class="code">script_lockout</span>
+			is put in place so that nothing can interrupt this sequence. After the startup 
+			is complete, it then calls the 'trigger move' function, to commence movement 
+			along a path.
+			<p>
+			The disabler routine below is fairly simple.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger tank_disable<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 4 inc 1 // up the stop counter<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 4 abort_if_less_than 4<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 8 // set stop check<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self deathcheck<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				Every time this is called (once per second),
+				<span class="code">accum 4</span>
+				is incremented. If the value of
+				<span class="code">accum 4</span>
+				is below 4, then the function does nothing more.
+				<span class="code">Accum 4</span>
+				will be reset by the enabler function as long as the tank is not stuck, and 
+				someone is in the trigger. If the tank is stuck, or no-one is in the trigger, 
+				then the
+				<span class="code">accum</span>
+				will be allowed to continue incrementing, up to the value of 4 and beyond. Once 
+				it reaches this stage, the rest of the function will be allowed to execute, and 
+				the stopped moving flag (<span class="code">accum 1 bit 8</span>
+			) will be set. This also then calls the 'trigger deathcheck' function, to be 
+			sure that something is checking whether the tank has been damaged enough to go 
+			into its broken state.
+			<p>
+			Outlined below are some more of the tank's main functions.
+			<p>
+				<span class="smalltitle">Movement Loop</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger move_check<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 3<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self dispatch<br>
+							}<br>
+							<br>
+							trigger move<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self move_check<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 500<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self move<br>
+							}<br>
+							<br>
+							trigger dispatch<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 3 trigger_if_equal 0 tank run_0<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 3 trigger_if_equal 133 tank run_133<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			The 'trigger move' function will be called from the 'tank_enabler' event upon 
+			startup, and never again, unless it shuts down, and then starts up again, or is 
+			continuing movement from a previous call. The 'trigger move' function calls the 
+			'trigger move_check' function which will see if the tank is stuck, and if not, 
+			then call the 'trigger dispatch' function which will in turn select the 
+			appropriate 'run_XXX' function to move from its current position. If the 
+			'trigger move_check' function fails because the tank is stuck, then execution 
+			will return to the 'trigger move' function. The function will wait 500ms and 
+			then call itself again.<p>
+				<span class="smalltitle">Run Events</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger run_0<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger tank_turret2 run_0<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;followspline 0 spln0 80 wait length -64<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 2<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self run_continue<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				Above is one of the tank's 'trigger run' functions. This first sets the moving 
+				status to in (<span class="code">accum 1 bit 2</span>
+			), then issues the command for the turret to move (as it isn't attached using a 
+			tag in this case), and then issue its own move command. After this has 
+			completed, it sets the move status to off again, then calls the 'trigger 
+			run_continue' function.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger run_incpos<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 3 inc 1<br>
+							}<br>
+							<br>
+							trigger run_continue<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self run_incpos<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self deathcheck<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stopcheck<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self move<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			The 'trigger run_continue' function increases the position counter for the 
+			tank, checks it hasn't been damaged, if it hasn't, then checks it hasn't 
+			stopped because no one is escorting it, and then if there are escorts, trigger 
+			the move function, to continue movement.
+			<p>
+				<span class="smalltitle">Stuck Checking</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger stuck_check<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 3<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check_bridge_built<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check_bridge_dyna<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check_scriptlockout<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check_finished<br>
+							}<br>
+							<br>
+							trigger stuck_check_finished<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 3 abort_if_less_than 134<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 3<br>
+							}<br>
+							<br>
+							trigger stuck_check_scriptlockout<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 5 abort_if_equal 0<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 3<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			These functions, plus several more not outlined here, form a set of functions 
+			that check whether the tank can move or not.
+			<p>
+				The 'trigger stuck_check' function first resets
+				<span class="code">accum 1 bit 3</span>
+			, which it uses as an indicator to say whether or not the tank is in fact 
+			stuck. Since we are resetting it every time, we are assuming that the tank is 
+			not stuck unless we are told otherwise, which is the easiest way to handle 
+			things. Next, it calls the functions for each individual reason for being 
+			stuck, such as the bridge not being built, or it having finished its entire run 
+			across the map.
+			<p>
+				These extra functions simply check to make sure they are valid, usually by 
+				checking the position indicator, and any other data they may need to know 
+				about. If those checks don't fail, then they set
+				<span class="code">accum 1 bit 3</span>, as an indicator that the tank is in 
+				fact stuck. Now, no matter what any of the other events do (assuming they don't 
+				reset
+				<span class="code">accum 1 bit 3</span>, which they shouldn't ever do), the 
+				flag will remain set when the 'trigger stuck_check' function exits. Other 
+				functions can use this to check whether the tank is stuck by simply calling the 
+				'trigger stuck_check' function, then checking the value of
+				<span class="code">accum 1 bit 3</span>
+			.
+			<p>
+				<span class="smalltitle">Stop Checking</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger stopcheck_setup<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 6<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 8<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stuck_check<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 3<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 6<br>
+							}<br>
+							<br>
+							trigger stopcheck<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self stopcheck_setup<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_not_bitset 6<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// Any just stopped moving stuff goes here<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger tank_sound stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self tracks_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 45 10 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 666<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 0 1 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 900<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;resetscript<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			These two functions, in combination, check whether the tank should stop its 
+			movement, as either it's stuck, or no-one is escorting it.
+			<p>
+				The 'trigger stopcheck_stuck' function does the initial checks to see whether 
+				either of those conditions are met, and stores the result as
+				<span class="code">accum 1 bit 6</span>
+			.
+			<p>
+			The 'trigger stopcheck' function will then check that value, and act 
+			accordingly, either shutting the tank down, or aborting. As before, since the 
+			shutdown animation requires some waits, the shutdown enforces a script lockout 
+			during that period to prevent anything from interfering.
+			<p>
+				<span class="smalltitle">Script Lockouts</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							trigger script_lockout<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 5 inc 1<br>
+							}<br>
+							<br>
+							trigger script_lockout_stop<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 5 inc -1<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				The script lockout system acts as a reference counter, that is, it keeps track 
+				of how many times it has been told to lock itself using
+				<span class="code">accum 5</span>. This allows various parts of the script to 
+				check whether it is locked, by checking that
+				<span class="code">accum 5</span>
+			is not 0. As this isn't just a flag, it can be used by multiple parts of the 
+			script at once, from multiple procedures, as long as they make sure to unlock 
+			the tank when they are finished. This was used for the firing sequences and 
+			some other things.
+			<p>
+				<span class="smalltitle">Death and Resurrection</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							death<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 7<br>
+							}<br>
+							<br>
+							trigger deathcheck<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_not_bitset 7<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 9<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 abort_if_bitset 2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 5 abort_if_not_equal 0<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitset 9<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;changemodel 
+							models/mapobjects/tanks_sd/churchhill_broken.md3<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;setstate tank_smoke default<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;alertentity kill_tank<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self sound_death<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self tracks_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self tracks_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 45 10 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 666<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;startanimation 0 1 15 nolerp norandom<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout_stop<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;resetscript<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				The 'trigger death' function simply sets
+				<span class="code">accum 1 bit 7</span>
+			to on, as a flag for the 'trigger deathcheck' function, so that it knows that 
+			the tank's health has reached 0.
+			<p>
+			The 'trigger deathcheck' function does a few checks at the beginning before 
+			changing the model, and playing the shutdown sequence. These checks are: making 
+			sure the health has hit 0, the tank hasn't already been made to look broken, 
+			the tank isn't moving, and the tank isn't in a script lockout. As before, it 
+			initiates a script lockout during the shutdown process.
+			<p>
+				This also fires the
+				<span class="code">target_kill</span>
+				entity, which is used to damage the
+				<span class="code">func_constructible</span>
+				entity, making the
+				<span class="code">trigger_objective_info</span>
+				entity become active, and so, allowing people to rebuild the constructible, 
+				which in turn, will activate the
+				<span class="code">script_mover</span>
+			entity which will call the 'rebirth' function below.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							rebirth<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 9<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;accum 1 bitreset 7<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;changemodel models/mapobjects/tanks_sd/churchhill.md3<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;setstate tank_smoke invisible<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger tank_sound rebirth<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;wait 500<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger self script_lockout_stop<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			This function simply makes the tank look repaired, setting the appropriate 
+			flags, and starts the low engine hum up again.
+			<p>
+				<span class="smalltitle">The Other Entities</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							tank_trigger<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;spawn<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait 100<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attachtotag tank tag_turret<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				This is the
+				<span class="code">trigger_multiple</span>
+			entity routine which is used to move the tank. When it spawns, it attaches its 
+			origin to a tag positioned at the turret origin on the tank. This allows the 
+			trigger to follow the tank around, without having to script its movement 
+			independently.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							tank_build<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;spawn<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait 100<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attachtotag tank tag_turret<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				This is the
+				<span class="code">trigger_objective_info</span>
+				entity routine, which is used for the repair of the tank. As with the
+				<span class="code">trigger_multiple</span>
+			entity it attaches itself to the tank, for easy movement.
+			<p>
+				<table width="90%" align="center" ID="Table1">
+					<tr>
+						<td class="codeblock">
+							tank_construct<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;spawn<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait 400<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_class 2<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;built final<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alertentity tank<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;trigger final_pos<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_constructxpbonus 
+							3<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructible_destructxpbonus 3<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				This is the
+				<span class="code">func_constructible</span>
+			entity associated with the tank. First, it sets its construction class, which 
+			is required for the command map marker to show correctly. When the construction 
+			finishes, it activates the tank, which will call its 'rebirth' function, and 
+			fill its health up again.
+			<p>
+			When the tank reaches its final position, the 'trigger final_pos' function is 
+			called, which changes the amount of XP you get for repairing the tank. </font>
+	</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Compiling Maps</span><br>
+			The following console commands are useful when testing a map built for Enemy 
+			Territory:
+			<p><b>/cg_draw2d</b><br>
+			This cvar command toggles the display of all the HUD elements except the gun.
+			<p><b>/cg_drawfps</b><br>
+			This cvar command toggles the display of the current frames per second that the 
+			map is running at. This is displayed under the map timer.
+			<p><b>/cg_drawgun</b><br>
+			This cvar command toggles the display of the weapon model.
+			<p><b>/cg_drawreinforcementtime</b><br>
+			This cvar command toggles the display of the next respawn time. The counter is 
+			displayed next to the map timer. Extremely useful for timing when the next wave 
+			of team mates might arrive or when would be a good time to tap out to the limbo 
+			menu for a respawn.<p>
+			Cg_thirdperson 2 will keep the player model in view at all times. This is 
+			extremely useful for checking the light values in a map because the player face 
+			will reflect the density of the light grid. (You will also need to also change 
+			the cg_thirdpersonangle to 180.)
+			<p><b>/cg_thirdperson</b><br>
+			Cg_thirdperson switches the player's viewpoint between first and third person. 
+			This can be useful when checking new player skins/models and the relative scale 
+			of the map geometry to the player model. The default value is 0 - first person.
+			<p><b>/cg_thirdpersonangle</b><br>
+			By default the thirdperson view is of the character from behind. Use 
+			cg_thirdpersonangle to alter the angle at which the player model is viewed. The 
+			angle is given in degrees where 0 is the default and a value of 180 degrees 
+			will give the player a view directly from the front of the player model.
+			<p><b>/cg_thirdpersonrange</b><br>
+			The default distance that the player model appears from the camera when in 
+			thirdperson perspective is 80 units. This value can be altered using 
+			/cg_thirdpersonrange. The greater the value the further the camera will appear 
+			from the player model.
+			<p><b>/con_drawnotify</b><br>
+			This command allows developer commands such as r_speeds to display in the main 
+			game view and not just in the console. The command is toggled between 0 and 1 
+			where 0 displays the developer commands in console only and 1 displays them 
+			in-game also.
+			<p><b>/con_notifytime</b><br>
+			Ideally set to at least 5 this cvar allows the developer to determine how long 
+			(in seconds) the command is displayed onscreen.
+			<p><b>/g_scriptdebug</b><br>
+			Prints to the server console every line of script that is executed, along with 
+			the scriptname of the entity which is calling the script, and the time it was 
+			executed at. This is extremely useful for tracking down strange script bugs.
+			<p><b>/g_debugconstruct</b><br>
+			This will speed up all construction times for quick construction checking.
+			<p><b>/r_speeds</b><br>
+			The r_speeds cvar displays rendering information which can be helpful in 
+			determining what may be having an effect on fps. The default value is 0 which 
+			will not display the r_speeds.
+			<p>
+			r_speeds 1 displays the following information:
+			<p>
+			xxx/xxx shaders/surfs xx leafs xxxxx verts xxxxx/xxxxx tris x.xx mtex x.xx dc
+			<p>
+			The renderer batches up drawsurfaces (map drawsurfaces, such as terrain chunks, 
+			walls, floors, model sections; model surfaces like players and weapons, and 
+			effect surfaces) into a large array before doing render passes. The "shaders" 
+			value is actually how many batches there are. Each batch can require one or 
+			more rendering pass. For example, weapon shaders often require two: a 
+			diffuse/texture pass to add details and an environment pass to make them shiny.
+			<p>
+			The "surfs" value indicates the number of drawsurfaces visible.
+			<p>
+			The "leafs" value indicates the number of BSP leafs that are visible in the 
+			scene. A leaf is the final, smallest BSP node which contains actual renderable 
+			data.
+			<p>
+			The most important value, "verts" shows the number of vertexes batched up to be 
+			rendered in the shader/batches to be calculated, transformed, lit etc. Ideally, 
+			the verts count should be as close to 1024 x the shaders (batches) count. 
+			Realistically, it will be difficult to achieve this target due to the amount of 
+			unique shader effects that only get rendered once.
+			<p>
+			The number of triangles visible in the scene is indicated by the "tris" value. 
+			Ideally the ratio of tris to verts should be as high as possible since you want 
+			to maximize the number of tris compared to the number of verts.
+			<p><b>/r_lightmap</b><br>
+			Setting this cvar to 1 will turn off textures on light mapped surfaces so that 
+			they appear white. This makes it easier to see how shadows affect these 
+			surfaces. All drawn surfaces not pastel white are vertex lit and are not 
+			affected by the external lightmaps.
+			<p>
+			R_lightmap 2 will re-colour the map surfaces in light intensity values. This 
+			has to be done before the map is loaded. (3 does it in the logical red is hot 
+			and has a higher intensity)
+			<p><b>/r_shownormals</b><br>
+			Normals indicate the direction a triangle is facing. Use r_shownormals to 
+			display normals.
+			<p>
+				r_shownormals 1: shows you the vertex normals on everything being drawn<br>
+			r_shownormals 2: shows you the origin, direction and colour of the lighting on 
+			entities. This lets you debug the lightgrid.
+			<p><b>/r_showtris</b><br>
+			The r_showtris cvar displays the triangles drawn by the game engine. There are 
+			three r_showtris levels: 0 - 2. The default value is 0 which does not display 
+			triangles.
+			<p>
+				r_showtris 1 displays depth-buffered triangles, i.e. only those triangles which 
+				can actually be seen. This lets the developer see the outline of brushes/models 
+				more easily and is especially useful when checking un-VIS'd maps or those with 
+				complex geometry.<br>
+			r_showtris 2 displays all triangles in view which the engine is currently 
+			rendering. (This is recognizable as the old Q3 r_showtris 1 cvar).
+			<p><b>/r_triscolor</b><br>
+			This cvar sets the colour of the triangles displayed by the r_showtris cvar. 
+			The default value is "1.0 1.0 1.0 1.0" which will draw solid white lines around 
+			all triangles drawn on screen. The first 3 values are the RBG colour and the 
+			final value is the alpha-blend value. This command is useful if you are 
+			debugging snow style maps which involve a lot of whiteness.
+			<p><b>/god</b><br>
+			In God mode the player will be invulnerable to anything in the map that would 
+			normally hurt them, such as damage from a weapon, high falls or remaining under 
+			water for long periods of time. Please note that some triggers in the game will 
+			still hurt the player regardless of god like status. The trigger_hurt entity 
+			has a spawnflag setting to override god player status.
+			<p><b>/map_restart</b><br>
+			This command will restart the level and will respawn the player. It will also 
+			reload the script file for the map from disk again and reset all construction 
+			items in a map. This is useful for tweaking and testing scripts without having 
+			to reload the map from scratch each time.
+			<p><b>/nofatigue</b><br>
+			When the player is sprinting it will use up stamina. This is indicated by the 
+			green bar on the lower right of the HUD. When it reaches the bottom the player 
+			will slow down. By setting /nofatigue to 1 will allow the player to continue to 
+			sprint even when out of stamina.
+			<p><b>/noclip</b><br>
+			Setting noclip to 1 allows the developer to pass through otherwise solid 
+			geometry and anything that has been player-clipped.
+			<p><b>/screenshot</b><br>
+			Takes a screenshot from the current view and writes it to the 
+			'etmain/screenshots' folder.
+			<p><b>/timelimit</b><br>
+			This command sets the length of time (in minutes) that the game will run for 
+			before it automatically ends if the offensive objectives haven't been 
+			completed. After this time the next level will load. If you need to test a map 
+			over a long period of time then set timelimit to 0.
+			<p><b>/timescale</b><br>
+			Useful when checking large maps and scripted sequences, the timescale cvar will 
+			alter the speed at which the game is running. A value of 2, for instance, will 
+			run the map at twice the normal speed. (Please check the developer config's for 
+			examples of how this command can be useful if bound to several keys.) </font>
+	</body>
+</html>

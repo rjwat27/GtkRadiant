@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Environmental Effects</span><br>
+			Environmental effects add atmosphere to a level ... literally. Competitive 
+			players might want to turn them off at the earliest opportunity, but everyone 
+			else should appreciate the added ambience.
+			<p>
+			Enemy Territory provides support for three main types of environmental effect; 
+			Precipitation, Distance Fogging and Foliage. In addition to this there are 
+			other, more subtle effects you can use in order to convey atmosphere to the 
+			player.
+			<p>
+				<span class="smalltitle">Precipitation</span><span class="gensmall">(See sand storms)</span><br>
+			There are two types of precipitation currently available: Snow, and Rain. Both 
+			use the same worldspawn key, atmosphere. The individual keys in the value 
+			strings provide the following settings:
+			<p>
+				<table>
+					<tr bgcolor="#000000">
+						<td class="gensmallwhite">Key</td>
+						<td class="gensmallwhite">Default</td>
+						<td class="gensmallwhite">Description</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>T</td>
+						<td>RAIN</td>
+						<td>Type of effect (sypports 'RAIN' or 'SNOW')</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>B</td>
+						<td>5 10</td>
+						<td>Base times (X seconds, or between X and Y seconds)</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>C</td>
+						<td>1 1</td>
+						<td>Time to move from base to gust (X seconds, or between X and Y seconds)</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>G</td>
+						<td>0 2</td>
+						<td>Gust times (X seconds, or between X and Y seconds)</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>BV</td>
+						<td>0 100</td>
+						<td>Base vector (x and y units/sec)</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>GV</td>
+						<td>0 100</td>
+						<td>Gust vector (x and y units/sec)</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>W</td>
+						<td>1 2</td>
+						<td>Weight of particle (X, or from X to Y depending on base/gust position)</td>
+					</tr>
+					<tr bgcolor="#C0C0C0">
+						<td>H</td>
+						<td>0</td>
+						<td>If a particle gets created more than this amount of units above a player drop 
+							the creation spot down to viewheight + H (this parameter is optional)</td>
+					</tr>
+					<tr bgcolor="#D0D0D0">
+						<td>D</td>
+						<td>300 300</td>
+						<td>Number of particles (baseparticles / gustparticles) - max 3000</td>
+					</tr>
+				</table>
+			<p>
+			Two maps included with Enemy Territory used Rain and Snow effects. The 
+			atmosphere worldspawn keys used for each is as follows:
+			<p>
+				Radar: "T=RAIN,B=5 10,C=0.5,G=0.5 2,BV=50 50,GV=200 200,W=1 2,D=2000"<br>
+			Railgun: "T=SNOW,B=5 10,C=0.5,G=0.3 2,BV=20 30,GV=25 40,W=3 5,D=2400"
+			<p>
+			It's possible to create sleet or hail effects by varying the weight (W) of the 
+			particles, or to produce a light rain or snow shower by decreasing the density 
+			(D) of the particles.
+			<p>
+			If your level has a very high sky, you may find your snow or rain fades out to 
+			nothing before it has chance to hit the ground. To fix this you can adjust the 
+			height it starts at and cap it artificially using the height (H) parameter.
+			<p>
+			For variable weather, the base (B, BV) and gust (G, GV) parameters can be used 
+			to adjust the precipitation over time. Most of the parameters in the atmosphere 
+			key can be given dual values for base and gust, as shown in the table above. By 
+			using markedly different values for each, and setting a large time to gust (C) 
+			value, you can create weather that increases or decreases over the course of a 
+			match. </font>
+	</body>
+</html>

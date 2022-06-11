@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Appendix A: Scripting Commands</span><br>
+			<p>
+				<dl>
+					<b>Message System</b><br>
+					<i>wm_teamvoiceannounce &lt;team&gt; &lt;soundname&gt;</i>
+					<dd>
+						Plays sound to target team.
+					</dd>
+				</dl>
+				<dl>
+					<i>wm_addteamvoiceannounce &lt;team&gt; &lt;soundname&gt;</i><br>
+					<i>wm_removeteamvoiceannounce &lt;team&gt; &lt;soundname&gt;</i>
+					<dd>
+						Adds or removes sound to/from the queue of sounds that a player gets to hear 
+						when he joins a team.
+					</dd>
+				</dl>
+				<dl>
+					<i>wm_objective_status &lt;objective_number&gt; &lt;team&gt; 
+						&lt;status(0:blank|1:tick|2:cross)&gt;</i>
+					<dd>
+						Sets the tick or cross status overlay on the objective panel in the limbo menu 
+						for the specific objective.
+					</dd>
+				</dl>
+				<i>wm_objective_status &lt;objective_number&gt; &lt;team&gt; &lt;status&gt;</i><br>
+			<p>
+				<dl>
+					<b>Trains, splines and animations</b><br>
+					<i>abortmove</i>
+					<dd>
+						This will stop any movement currently happening on the entity, this will 
+						probably break on spline paths at the moment if you try to stop on a spline 
+						path then resume.
+					</dd>
+				</dl>
+				<dl>
+					<i>attachtotag &lt;targetname&gt; &lt;tagname&gt;</i>
+					<dd>
+						Connect this entity onto the tag of another entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>attatchtotrain &lt;targetname&gt; &lt;length&gt;</i>
+					<dd>
+						Makes this entity follow another entity with a specified distance (only works 
+						in combination with followpath).
+					</dd>
+				</dl>
+				<dl>
+					<i>faceangles &lt;pitch&gt; &lt;yaw&gt; &lt;roll&gt; &lt;duration/GOTOTIME&gt; 
+						[ACCEL/DECCEL]</i>
+					<dd>
+						The entity will face the given angles, taking &lt;duration&gt; to get their. If 
+						the GOTOTIME is given instead of a timed duration, the duration calculated from 
+						the last gotomarker command will be used instead.
+					</dd>
+				</dl>
+				<dl>
+					<i>followpath &lt;direction 0(forward)|1(backward)&gt; &lt;splinename&gt; 
+						&lt;speed&gt; [wait]</i><br>
+					<i>followspline &lt;direction 0(forward)|1(backward)&gt; &lt;splinename&gt; 
+						&lt;speed&gt; [wait]</i>
+					<dd>
+						Direction specifies whether it will travel from start to end (0), or end to 
+						start (1). Splinename is the targetname of the spline you wish the train to 
+						follow. Speed is how fast the train will travel along the spline. Wait is an 
+						optional command that functions the same as on gotomarker, the script will stop 
+						execution till this movement has occurred.<br>
+						<b>Note:</b> Followpath is required when attatchtotrain is used, otherwise use 
+						followspline.
+					</dd>
+				</dl>
+				<dl>
+					<i>gotomarker &lt;targetname&gt; &lt;speed&gt; [accel/deccel] [turntotarget] [wait] 
+						[relative &lt;position&gt;]</i>
+					<dd>
+						<b>Note:</b> speed may be modified to round the duration to the next 50ms for 
+						smooth transitions.
+					</dd>
+				</dl>
+				<dl>
+					<i>playanim &lt;startframe&gt; &lt;endframe&gt; [looping &lt;FOREVER/duration&gt;] 
+						[rate &lt;FPS&gt;]</i>
+					<dd>
+						<b>Note:</b> all source animations must be at 20fps.
+					</dd>
+				</dl>
+				<dl>
+					<i>setposition &lt;targetname&gt;</i>
+					<dd>
+						Moves entity to position of target entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>setrotation &lt;pitchspeed&gt; &lt;yawspeed&gt; &lt;rollspeed&gt;</i>
+					<dd>
+						Sets the rotational velocity of an entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>stoprotation</i>
+					<dd>
+						Stops the rotational velocity of an entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>setspeed &lt;x&gt; &lt;y&gt; &lt;z&gt; [gravity|lowgravity]</i>
+					<dd>
+						Sets the directional velocity of an entity. Use gravity/lowgravity to use 
+						non-linear movement.
+					</dd>
+				</dl>
+				<dl>
+					<i>startanimation &lt;startframe&gt; &lt;framecount&gt; &lt;fps&gt; 
+						[norandom|nolerp|noloop]</i>
+					<dd>
+						Make an entity animate. (Used with
+						<span class="code">misc_gamemodel</span>.)
+					</dd>
+				</dl>
+				<dl>
+					<i>setposition &lt;targetname&gt; &lt;default|invisible|underconstruction&gt;</i>
+					<dd>
+						Sets the state of an entity.
+					</dd>
+				</dl>
+			<p>
+				<dl>
+					<b>Command Post stuff</b><br>
+					<i>setchargetimefactor &lt;team&gt; &lt;class&gt; &lt;factor&gt;</i>
+					<dd>
+						team: 0 = axis, 1 = allies
+					</dd>
+				</dl>
+				<dl>
+					<i>sethqstatus &lt;team&gt; &lt;status&gt;</i>
+					<dd>
+						Enables/disables the hq bonus for a team.
+					</dd>
+				</dl>
+			<p>
+				<dl>
+					<b>Tank related commands</b><br>
+					<i>setdamagable &lt;targetname&gt; &lt;0|1&gt;</i>
+					<dd>
+						Set damagable status of target entity.
+					</dd>
+				</dl>
+			<p>
+				<dl>
+					<b>Construction</b><br>
+					<i>construct &lt;targetname&gt;</i>
+					<dd>
+						Construct stage of target entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>constructible_class &lt;int:class&gt;</i><br>
+					<i>constructible_chargebarreq &lt;float:fraction&gt;</i><br>
+					<i>constructible_constructxpbonus &lt;int:xppoints&gt;</i><br>
+					<i>constructible_destructxpbonus &lt;int:xppoints&gt;</i><br>
+					<i>constructible_health &lt;int:health&gt;</i><br>
+					<i>constructible_weaponclass &lt;int:class&gt;</i><br>
+					<i>constructible_duration &lt;int:duration&gt;</i>
+					<dd>
+						See <a href="construction.html#conclasses">construction classes</a> for 
+						details.
+					</dd>
+				</dl>
+				<dl>
+					<i>repairmg42 &lt;targetname&gt;</i>
+					<dd>
+						Repair target MG42.
+					</dd>
+				</dl>
+				<dl>
+					<i>setmodelfrombrushmodel &lt;targetname&gt; [useoriginforpvs] [nonsolid]</i>
+					<dd>
+						Sets model to brushmodel of target
+						<span class="code">func_brushmodel</span>
+						entity.
+					</dd>
+				</dl>
+			<p>
+				<dl>
+					<b>Sound Commands</b><br>
+					<i>enablespeaker &lt;targetname&gt;</i><br>
+					<i>disablespeaker &lt;targetname&gt;</i><br>
+					<i>togglespeaker &lt;targetname&gt;</i>
+					<dd>
+						See <a href="speakereditor.html#scripting">speaker scripting</a> for details.
+					</dd>
+				</dl>
+				<dl>
+					<i>playsound &lt;soundname OR scriptname&gt; [LOOPING]</i>
+					<dd>
+						Currently only allows playing on the VOICE channel, unless you use a sound 
+						script. Use the optional LOOPING paramater to attach the sound to the entities 
+						looping channel.
+					</dd>
+				</dl>
+				<dl>
+					<i>stopsound</i>
+					<dd>
+						Stops any looping sounds for this entity.
+					</dd>
+				</dl>
+			<p>
+				<dl>
+					<b>Misc. Commands</b><br>
+					<i>changemodel &lt;modelname&gt;</i>
+					<dd>
+						Change the model of this entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>remapshader &lt;target shader&gt; &lt;new shader&gt;</i><br>
+					<i>remapshaderflush</i>
+					<dd>
+						Remapshader schedules the replacement of a target shader by a new one. 
+						Remapshaderflush executes all scheduled replacement.
+					</dd>
+				</dl>
+				<dl>
+					<i>(global)accum &lt;buffer_index&gt; &lt;command&gt; <&lt;paramater...&gt;</i>
+					<dd>
+						(global)accum &lt;n&gt; inc &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_less_than &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_greater_than &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_not_equal &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_equal &lt;m&gt;<br>
+						(global)accum &lt;n&gt; set &lt;m&gt;<br>
+						(global)accum &lt;n&gt; random &lt;m&gt;<br>
+						(global)accum &lt;n&gt; bitset &lt;m&gt;<br>
+						(global)accum &lt;n&gt; bitreset &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_bitset &lt;m&gt;<br>
+						(global)accum &lt;n&gt; abort_if_not_bitset &lt;m&gt;<br>
+						(global)accum &lt;n&gt; trigger_if_equal &lt;m&gt; &lt;s&gt; &lt;t&gt;<br>
+						(global)accum &lt;n&gt; wait_while_equal &lt;m&gt;
+					</dd>
+				</dl>
+				<dl>
+					<i>cvar &lt;cvarName&gt; &lt;operation&gt; &lt;value&gt;</i>
+					<dd>
+						Operation can be any of:<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;inc<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_less_than<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_greater_than<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_not_equal<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_not_equals<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_equal<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_equals<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;bitset<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;bitreset<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_bitset<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;abort_if_not_bitset<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;set<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;random<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;trigger_if_equal<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;wait_while_equal
+					</dd>
+				</dl>
+				<dl>
+					<i>kill &lt;targetname&gt;</i>
+					<dd>
+						Kill target entity.
+					</dd>
+				</dl>
+				<dl>
+					<i>remove</i>
+					<dd>
+						Schedule this entity to be freed on the next serverframe.
+					</dd>
+				</dl>
+				<dl>
+					<i>setglobalfog &lt;bool:restore&gt; &lt;int:duration&gt; [float:r] [float:g] 
+						[float:b] [float:depthForOpaque]</i>
+					<dd>
+						Changes the global fog in a map.
+					</dd>
+				</dl>
+				<dl>
+					<i>setautospawn &lt;target spawn&gt; &lt;team&gt;</i>
+					<dd>
+						Set the autospawn of a team to target spawn. The target spawn string is the 
+						'description' key on the
+						<span class="code">team_WOLF_objective</span>.
+					</dd>
+				</dl>
+				<dl>
+					<i>spawnrubble &lt;spawnrubble&gt;</i>
+					<dd>
+						Spawn rubble, use in combination with
+						<span class="code">func_debris</span>.
+					</dd>
+				</dl>
+				<dl>
+					<i>wait &lt;duration&gt;</i><br>
+					<i>wait random &lt;min&gt; &lt;max&gt;</i>
+					<dd>
+						Wait for a certain duration.
+					</dd>
+				</dl>
+	</body>
+</html>

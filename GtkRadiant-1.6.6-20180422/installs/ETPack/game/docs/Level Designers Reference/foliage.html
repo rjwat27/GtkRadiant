@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000ff" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Foliage Technology</span><br>
+			Wolfenstein Enemy Territory adds a new feature to the Quake 3 engine's shader 
+			repertoire, the ability to automatically place detail models directly onto map 
+			surfaces in an algorithmic fashion. They are designed primarily for foliage, 
+			hence the name, but can be used for adding pebbles or rocks scattered randomly 
+			around terrain.
+			<p>
+			One key feature of foliage is that it will fade out over distance, but this can 
+			cause a problem looking at players at a distance. It is suggested that 
+			additional trees and tall bushes are added to the landscape to offer other 
+			forms of permanent cover.
+			<p>
+			When creating foliage, there are 3 things to set up: the foliage model, the 
+			foliage model's shader(s), and changes to any existing shader where foliage is 
+			desired on.
+			<p>
+				Foliage is compiled into the BSP hence it is <b>static</b>
+			. If you need to change the foliage in your map, it must be recompiled. This is 
+			done for performance reasons -- when foliage is loaded by Enemy Territory it is 
+			compiled into a list for fast rendering.
+			<p>
+			To compile foliage into a map, SDMap2 (Q3Map2) 2.3.32 or higher is required.
+			<p>
+				<span class="smalltitle">Adding Foliage to Existing Shaders</span><br>
+			There is a new shader directive 'q3map_foliage' that specifies how SDMap2 
+			applies foliage to a surface. It takes this form:
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							q3map_foliage &lt;model&gt; &lt;scale&gt; &lt;density&gt; &lt;odds&gt; &lt;use 
+							inverse alpha&gt;<br>
+							<br>
+							q3map_foliage models/foliage/grass_5.md3 1.0 16 0.025 0<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">model:</td>
+						<td>models/foliage/grass_5.md3</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">scale:</td>
+						<td>1.0. This is normal size, 0.5 would be half size, 2.0 would be double</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">density:</td>
+						<td>T16 units. This is the smallest chunk Q3Map will divide a surface up into 
+							before it tries to place a foliage instance.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">odds:</td>
+						<td>0.025. This means that a random 2.5% of the potential spots for foliage will be 
+							placed. Typically you want to use small values for this; otherwise you will end 
+							up with ridiculously high polygon counts.</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">inverse alpha:</td>
+						<td>0. this means to use the straight vertex alpha as a scaling factor against the 
+							odds of appearing. This is so that terrain shaders with multiple blending 
+							layers can have different foliage on each style and have them fade/blend 
+							properly together.</td>
+					</tr>
+				</table>
+			<p>
+			If you have brush on terrain0 and grass on terrain1, then the blend shader 
+			would have two q3map_foliage directives like this:
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							q3map_foliage models/foliage/brush.md3 1.0 16 0.025 1<br>
+							q3map_foliage models/foliage/grass_5.md3 1.0 16 0.025 0<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+			Where the higher-numbered terrain layer/shader uses normal vertex alpha to 
+			modulate the odds-of-occurring and the lower-numbered layer uses inverse alpha.
+			<p>
+				<span class="smalltitle">Creating a Foliage Model</span><br>
+			Foliage models should be kept simple and small. Since they're entirely 
+			decorative and non-solid, you should avoid making a foliage model that looks as 
+			if it could block the player.
+			<p>
+			For best results, make your models in Max or Maya as a single object (multiple 
+			objects will slow down rendering) with a single texture/shader, and try to keep 
+			the polygon count as low as possible. Our initial test foliage models were only 
+			6 triangles apiece. When there are a few thousand foliage instances on-screen, 
+			the small numbers can add up, so be thrifty.
+			<p>
+				<span class="smalltitle">Foliage Model Shaders</span><br>
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							models/foliage/grass_5<br>
+							{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;surfaceparm trans<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;surfaceparm pointlight<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;cull disable<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;// distanceCull &lt;inner&rt; &lt;outer&rt; &lt;alpha 
+							threshold&rt;<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;distanceCull 256 1024 0.4<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map 
+							models/foliage/grass_tan.tga<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphaFunc GE128<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rgbGen exactVertex<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphaGen vertex<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+		</font>
+	</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Speaker Editor</span><br>
+			The in-game speaker editor is a graphical user interface to create and 
+			manipulate ambient speakers. The GUI can be used to select the sound file, edit 
+			the properties of the target speaker entity, the origin, etc. The speaker 
+			entities and co-ordinates are stored in a separate file 
+			'/sound/maps/&lt;mapname&gt;.sps', this file is saved every time you use one of 
+			the commands.
+			<p>
+				<span class="smalltitle">Commands</span><br>
+			There are four commands (toggles) available for editing speaker's as follows: 
+			(Any of these commands can be bound to keys for quicker editing)
+			<p>
+				<table>
+					<tr>
+						<td valign="top">
+							<img src="images/speaker_1.jpg"><p>
+						</td>
+						<td valign="top"><b>\editspeakers</b><br>
+							This enables the edit mode for speakers. It automatically disables drawing of 
+							your HUD and weapon. You will get an overview of current number of speakers in 
+							the map (only those placed with \editSpeakers) and what keys your edit commands 
+							are bound to. Once in edit mode you can use the commands for creating, 
+							modifying and reverting. Executing \editSpeakers again will disable edit mode.</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							<img src="images/speaker_2.jpg"><p>
+						</td>
+						<td valign="top"><b>\dumpSpeaker</b><br>
+							This creates a new speaker right in front of you (64 units horizontal offset of 
+							the player origin for the techies out there). You can't place speakers inside 
+							solid structures, if you attempt this it will be moved horizontally towards 
+							your origin until it can be placed.</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top">
+							<img src="images/speaker_3.jpg"><br>
+							<br>
+							<img src="images/speaker_4.jpg"><br>
+							<br>
+							<img src="images/speaker_5.jpg"><p>
+						</td>
+						<td valign="top"><b>\modifySpeaker</b><br>
+							Point your crosshair at the speaker you want to edit and use \modifySpeaker to 
+							bring up the GUI. The GUI has the following options to set the speaker's flags:
+							<p>
+								<u>origin</u><br>
+							Click on the speaker's axis and move the mouse to change the origin (x,y,z).
+							<p>
+								<u>noise</u><br>
+							Type the path to the sound file you want to use (it must be within the etmain 
+							directory) typically this is sound/world/&lt;filename&gt;.wav for ambient 
+							sounds. You can use TAB to auto complete the filename or write it manually.
+							<p>
+								<u>targetname</u><br>
+							The name you can use to trigger the speaker from a script file. Valid letters 
+							are those from the English alphabet, digits 0-9, hyphen '-' and underscore '_', 
+							capitalisation is ignored (see the scripting section).
+							<p>
+								<u>looped</u><br>
+								The choices are no, on and off:<br>
+								<i>no</i> - speaker plays once or randomly (see Wait and Random flags).<br>
+								<i>on</i> - speaker plays in a loop forever or until deactivated.<br>
+								<i>off</i>
+							- speaker plays in a loop after activation forever or until deactivated again.
+							<p>
+								<u>broadcast</u><br>
+								The choices are no, nopvs and global.<br>
+								<i>no</i> - the speaker is subject to <a href="glossary.html#pvs">pvs</a>, if 
+								you "walk around the corner" you will not be able to hear it anymore. Note that 
+								sound engine has no means of calculating obstruction, occlusion or reflection.<br>
+								<i>nopvs</i> - the speaker is audible everywhere within it's range, even if you 
+								can't see it.<br>
+								<i>global</i>
+							- the speaker is audible everywhere on the map (e.g. the thunders on radar). 
+							Global sounds can't be looped and ignore all other flags.
+							<p>
+								<u>wait</u><br>
+							Sets the time in milliseconds after which the speaker is played again. The 
+							looped flag must be set to no. Speakers with a wait time can't be triggered 
+							from a script.
+							<p>
+								<u>random</u><br>
+							Sets the span in milliseconds by how much a wait time is randomised, e.g. 
+							setting wait to 10000 and random to 2000 will repeat the sound every 8 to 12 
+							seconds.
+							<p>
+								<u>volume</u><br>
+							The actual volume is defined by the sound sample and not by the game engine, 
+							the volume flag acts as an amplifier. The default volume is 127 which means 
+							there is no volume modification done to the sound file. To make a sound twice 
+							as loud (+6dB) in game you would set the volume to 255 or half as loud (-6dB) 
+							you would set it to 63. How much amplification you can use depends on the 
+							volume of the sound file, if you use too much you will notice digital clipping 
+							in which case you should reduce the volume.
+							<p>
+								<u>range</u><br>
+							A speaker emits noise omni-directional; imagine the audible area as being a 
+							sphere with the speaker in the centre of it. The range flag sets the radius of 
+							the sphere (default is 1250 units). The noise gradually fades out over the 
+							range. Range and Volume flags work closely together, if you have an object with 
+							a loud noise, you would want to increase Volume and Range for a realistic 
+							effect.
+							<p>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">&nbsp;</td>
+						<td valign="top"><b>\undoSpeaker</b><br>
+							The last speaker system command will undo the last command issued while in edit 
+							mode.</td>
+					</tr>
+				</table>
+			<p>
+				<a class="smalltitle" name="scripting">Scripting</a><br>
+			There are three trigger types available to trigger sound events from map 
+			scripts. Every speaker that is supposed to be executed via a script needs a 
+			unique targetname. The triggers are:
+			<p>
+				<table>
+					<tr>
+						<td class="code" valign="top">togglespeaker &lt;targetname&gt;:</td>
+						<td>plays a speaker on execution</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">enablespeaker &lt;targetname&gt;:</td>
+						<td>turns on a looped speaker on execution (speaker's looped flag must be 'off' or 
+							it will play)</td>
+					</tr>
+					<tr>
+						<td class="code" valign="top">disablespeaker &lt;targetname&gt;:</td>
+						<td>turns off a looped speaker on execution</td>
+					</tr>
+				</table>
+			<p>
+				<b>togglespeaker</b>
+			will switch the speaker from one state to another. If toggling a looped sound 
+			it will start or stop playing. A non-looped sound will play once and then stop.
+			<p>
+				<b>enablespeaker</b> and <b>disablespeaker</b>
+			can be used to switch on and off a looping sound, e.g. the Morse code sound for 
+			the command posts). </font>
+	</body>
+</html>

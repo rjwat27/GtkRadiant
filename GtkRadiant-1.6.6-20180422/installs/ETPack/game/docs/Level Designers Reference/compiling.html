@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Compiling Maps</span><br>
+			Before a map can be played in-game, it must be compiled. This is similar to 
+			compiling a C program into an executable, or baking dough into bread. The map 
+			editor, SDRadiant, operates on map files, and the game reads bsp files. 
+			Generating a bsp from a map is a 3-stage process:
+			<ul>
+				<li>
+				The BSP phase, where the brushes are used to create a BSP-tree and renderable 
+				surfaces are generated
+				<li>
+				The Vis phase (-vis) where visibility processing is done
+				<li>
+				The Light phase (-light) where the map is illuminated, generating lightmaps and 
+				setting vertex colours
+			</ul>
+			While Enemy Territory is based on the Quake 3 engine, and mapping for it is 
+			similar to RtCW, there are certain engine/rendering features which require 
+			slightly different compile-time options. To compile our levels, we used SDMap2, 
+			which is an enhanced version of Q3Map2 with Enemy Territory specific features.
+			<p>
+				<span class="smalltitle">Key Differences</span><br>
+				<ul>
+					<li>
+					Enemy Territory supports up to 1024 vertices per renderable surface and up to 
+					2048 triangles. This is up from 1000 vertices per surface in Quake 3 or RTCW, 
+					and up from 64 vertices on lightmapped surfaces. Note this limitation does not 
+					apply to patch meshes.
+					<li>
+					Foliage surfaces, created with the Enemy Territory foliage shader commands
+					<li>
+					Decals, set up with _decal entities projected onto the world
+					<li>
+					External lightmaps
+				</ul>
+			<p>
+				<span class="smalltitle">BSP Phase</span><br>
+				Enemy Territory maps must be compiled using the <b>-meta</b>
+			switch. This switch creates large triangle meshes from brush faces, allowing 
+			more complex scenes than RtCW with an equivalent vertex count. Mappers 
+			experienced with Q3Map2 should already be familiar with this switch.
+			<p>
+				Depending on how your map is constructed, you may wish to use the <b>-mv</b> and
+				<b>-mi</b> switches as well. The <b>-mv</b> switch specifies the maximum number 
+				of vertices to support on meta (triangle) surfaces, while the <b>-mi</b> switch 
+				specifies the maximum number of indexes. Triangles are composed of 3 indexes 
+				apiece, so the -mi value divided by 3 is the max number of triangles per 
+				surface. An example usage of these switches is: <b>-mv 1024 -mi 6144</b>
+			<p>
+				After the BSP phase is complete, assuming the map hasn't leaked, the following 
+				files will have been created:
+				<ul>
+					<li>
+					&lt;mapname&gt;.bsp (the compiled map)
+					<li>
+					&lt;mapname&gt;.prt (the portal file used by vis)
+					<li>
+					&lt;mapname&gt;.srf (the surface file used by light)
+				</ul>
+				<b>Note:</b>
+			The prt and srf files do not need to be included with the map when you release 
+			it. They are temporary files only used by SDMap2.
+			<p>
+				<span class="smalltitle">Vis Phase (-vis)</span><br>
+				The vis phase is equivalent to Quake 3 and RtCW. It can be run with the <b>-fast</b>
+				switch for cruder visibility processing, but should always be run in 'full' 
+				mode (no options) for a final compile. On maps with fog/farplane clipping, put 
+				a <b>farplanedist</b> key on the worldspawn entity with a value that 
+				corresponds to the distance at which the fog fades out, for example <b>1024</b>
+			. This will enable the vis phase to stop visibility processing beyond that 
+			distance. This can help make large, open maps more efficient, both in terms of 
+			stuff drawn and network overhead.
+			<p>
+				<span class="smalltitle">Light Phase (-light)</span><br>
+			The light phase typically takes the most time. Depending on how the map is lit, 
+			how many brushes there are, how much sky, models, and various compile options, 
+			the light phase can take anywhere from a few seconds to several hours.
+			<p>
+				For our maps, we used the following basic switches:<br>
+				<b>-light -fast -samples 2 -filter -bounce 8 -external -lightmapsize 256 -approx 8</b>
+			<p>
+				The <b>-fast</b>
+			switch is OK to use for final compiles, as long as you've been designing your 
+			lighting around it. The only difference between -fast and a non-fast compile is 
+			how SDMap2 handles area (shader) lights. They are typically a bit dimmer at 
+			distance with -fast.
+			<p>
+				The <b>-samples 2</b> (or 3 or 4, etc) enables adaptive 'smart' antialiasing of 
+				shadow edges. It's like the old <b>-extra</b>
+			command, but takes 1/4 the memory and is only about 1.5x the time as a normal 
+			compile. This switch is usually for final compiles only.
+			<p>
+				The <b>-filter</b>
+			switch enables box filtering of lightmap data, similar to how Photoshop's 
+			guassian blur works. Some maps look good with -filter and some don't. It's a 
+			personal choice.
+			<p>
+				Radiosity is enabled with the <b>-bounce N</b> switch, where N is the number of 
+				iterations you wish SDMap2 to bounce light around. It simulates the diffuse 
+				light interaction between surfaces by reflecting light off everything. If you 
+				shine a white light on a red wall, for instance, it will reflect red light. The 
+				colour reflected is taken from the texture, or the shader's <b>qer_editorimage</b>
+				or <b>q3map_lightimage</b>. The <b>-bounce</b>
+			switch is usually for final compiles only, as it generates thousands of lights 
+			with every iteration and can take hours to finish. However, at any point after 
+			the initial lighting phase is complete and the radiosity stages have begun, you 
+			can cancel compilation and the map will be lit up to the point at which it was 
+			cancelled.
+			<p>
+				Enemy Territory maps were generally much larger than their Q3 or RtCW 
+				counterparts, and generated tons of lighting data. To combat this, we used 
+				three special switches:<b>-external</b>, <b>-lightmapsize</b>, and 
+				</b>-approx</b>.
+				<ul>
+					<li>
+						<b>-external -lightmapsize 256</b> instructs SDMap2 to output lightmap data in 
+						the form of TGA images in the maps/<mapname>/ directory, with a width and height of 256 pixels. Our terrain shaders used 512x512 lightmaps, but generally don't use anything larger.
+<li><b>-approx 8</b>
+					sets the vertex-light approximation for lightmapped surfaces. If a surface is 
+					too small (less than the size of a lightmap pixel) or has no discernable shadow 
+					detail, then its lightmap will be discarded and the surface will be vertex lit. 
+					This can be a substantial memory saver on some maps.
+				</ul>
+			<p>
+				<a class="smalltitle" name="batchfile">Sample Compile Batch File</a><br>
+			To use this batch file, copy & paste it into a text editor and save as 
+			'compile.bat' in some directory. Be sure to edit the paths to fit your Enemy 
+			Territory install.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							@rem to use this batch file, drop a .map file on it or run it from a dos 
+							window:<br>
+							@rem &gt; compile &lt;mapname&gt;<br>
+							<br>
+							@set Q3MAP_PATH="C:\SDRadiant\sdmap2.exe"<br>
+							@set ET_PATH="C:/wolfet"<br>
+							@set MAP_PATH="C:/wolfet/etmain/maps/%1.map"<br>
+							@set GEN_OPTIONS=-fs_basepath C:/wolfet -game et<br>
+							<br>
+							@rem<br>
+							%Q3MAP_PATH% -meta -mv 1024 -mi 6144 %GEN_OPTIONS% -v %MAP_PATH%<br>
+							<br>
+							@rem<br>
+							%Q3MAP_PATH% -vis -saveprt %GEN_OPTIONS% %MAP_PATH%<br>
+							<br>
+							@rem<br>
+							%Q3MAP_PATH% -light -fast -samples 2 -filter -patchshadows -external 
+							-lightmapsize 256 -approx 8 %GEN_OPTIONS% -v %MAP_PATH%<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<span class="smalltitle">Converting BSP's to ASE Models</span><br>
+			A lot of the geometry in Enemy Territory, such as arches, rocks, pillars and 
+			other bits were brushes/patches converted to models. Since rotating brushes 
+			tends to screw up texturing, this was a method for our mappers to quickly build 
+			geometry in Radiant and place it in maps at odd angles or scales.
+			<p>
+			To convert a map to an ASE model (3DS Max ASCII Scene Export), it first must be 
+			compiled into a BSP. Place the geometry you wish to convert in a caulk box with 
+			a single entity (usually a player start). Then compile it with the following 
+			options:
+			<p>
+				<b>-meta -patchmeta -mv 1024 -mi 6144</b>
+			<p>
+				The <b>-patchmeta</b>
+			option is important because ASE models don't support patch meshes directly-only 
+			triangle/brush surfaces. You can have models in the map as well, they will 
+			convert to ASE the same as brush faces. Note: no vis or light phase is 
+			necessary.
+			<p>
+			Then to convert the BSP to an ASE, use the following command:
+			<p>
+				<b>-convert</b>
+			<p>
+			SDMap2 will output an ASE file next to the BSP file that can now be loaded in 
+			3DS Max or used as a misc_model entity in another map.
+			<p>
+				<span class="smalltitle">Sample Converter Batch File</span><br>
+			To use this batch file, save as 'convert.bat' in some directory. Be sure to 
+			edit the paths.
+			<p>
+				<table width="90%" align="center">
+					<tr>
+						<td class="codeblock">
+							@rem to use this batch file, drop a .map file on it or run it from a dos 
+							window:<br>
+							@rem &gt; compile &lt;mapname&gt;<br>
+							<br>
+							@set Q3MAP_PATH="C:\SDRadiant\sdmap2.exe"<br>
+							@set ET_PATH="C:/wolfet"<br>
+							@set MAP_PATH="C:/wolfet/etmain/maps/%1.bsp"<br>
+							<br>
+							@set GEN_OPTIONS=-fs_basepath C:/wolfet -game et<br>
+							<br>
+							@rem<br>
+							%Q3MAP_PATH% -convert %GEN_OPTIONS% -v %MAP_PATH%<br>
+						</td>
+					</tr>
+				</table>
+			<p>
+				<span class="smalltitle">GTKRadiant Compile Menu</span><br>
+			The map editor (SDRadiant) has been updated with the new parameters for the 
+			Enemy Territory compiler SDmap2.
+			<p>
+				<center><img src="images/bspmenu.jpg"></center>
+		</font>
+	</body>
+</html>

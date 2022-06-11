@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>Wolfenstein: Enemy Territory :: Level Designers Reference</title>
+		<link rel="stylesheet" href="styles/style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+		<table width="100%">
+			<tr>
+				<td width="100%" class="gensmall">Wolfenstein: Enemy Territory Documentation<br>
+					© 2003 Splash Damage, Ltd. All Rights Reserved.
+					<br>
+					<hr noshade>
+				</td>
+				<td align="right"><img src="images/3logos.jpg"></td>
+			</tr>
+		</table>
+		<font>
+			<span class="maintitle">Introduction</span><br>
+			This document is a basic primer for creating maps for Wolfenstein: Enemy 
+			Territory. It assumes that you have downloaded and installed the editing tools 
+			correctly and know how to use the GtkRadiant editor. So that all future 
+			upgrades of the GtkRadiant editor do not affect the Enemy Territory editing 
+			tools the editor executable has been renamed to SDRadiant.
+			<p>
+				There are plenty of tutorials on the Internet on how to use the GtkRadiant 
+				editor. A good place to start would be the <a href="http://www.qeradiant.com" target="_blank">
+					www.qeradiant.com</a>
+			site. The editor also has an extensive collection of links in the help 
+			documentation. (Press F1 inside of the editor)
+			<p>
+			At the back of this documentation is a glossary which defines certain technical 
+			terms used through out this manual. At relevant points certain words are 
+			hyperlinked to the glossary so that it is easier to understand what is being 
+			said.
+			<p>
+				<b>This manual is not a beginner's guide to mapping.</b>
+			<p>
+			Enemy Territory is based on existing RtCW technology and assumes the reader is 
+			familiar with the previous system. This manual only describes the new features 
+			of Enemy Territory. There are plenty of forums and tutorials which can help 
+			with the learning of the basics of mapping.
+			<p>
+				<span class="maintitle">Key Differences between Enemy Territory and RtCW</span><br>
+				Enemy Territory introduces a lot of new features and gameplay strategies. If 
+				you are planning on converting an existing RtCW map to Enemy Territory then 
+				consider the following points:
+				<ul>
+					<li>
+						The spawning system is simpler and uses fewer entities.</li>
+					<li>
+						Command posts. (either neutral or individual)</li>
+					<li>
+						Health/ammo cabinets. (Can be linked to constructions if necessary)</li>
+					<li>
+						Map objectives should be set up to use the limbo camera system.</li>
+					<li>
+						The construction system is a critical component in Enemy Territory and all maps 
+						should be designed with this feature in mind. (This a feature of the Engineer 
+						class only)</li>
+					<li>
+						Command map - all maps need to define the co-ordinates of the command map so 
+						that the map will load correctly and work with the limbo menu.</li>
+					<li>
+						Maps loaded from the in-game menu system need an arena file.</li>
+					<li>
+						Enemy Territory supports script moveable objects. (vehicles)</li>
+					<li>
+						Environmental effects like rain/snow.</li>
+					<li>
+						New fog system which works with multiple pass shaders and lightmapped terrain.</li>
+					<li>
+						Support for model foliage via a special shader. (Compiler option)</li>
+					<li>
+						A new class has been added to Enemy Territory called CovertOps. Team doors 
+						should be added to critical choke points in maps so some objectives can be 
+						bypassed.</li>
+					<li>
+						The terrain system can have external lightmaps and decals.</li>
+					<li>
+						All maps need a special "trace map" for the mortar and environmental effects to 
+						work.</li>
+					<li>
+						The shader language supports implicit shaders. This can affect how models and 
+						surfaces are lit in the game.</li>
+					<li>
+						New scripting commands to enhance the existing RtCW system.</li>
+					<li>
+						New compiler and Gtk plug-ins and features.</li>
+					<li>
+						Land Mines and new surface parameters.</li>
+				</ul>
+		</font>
+	</body>
+</html>

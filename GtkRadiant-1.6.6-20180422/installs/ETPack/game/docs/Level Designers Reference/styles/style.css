@@ -1,0 +1,32 @@
+body { background-color: #FFFFFF; }
+
+/* General font families for common tags */
+font, th, td, p	{ font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; }
+
+/* General links */
+a:link			{ color: #0000FF; text-decoration: none; }
+a:visited		{ color: #800080; text-decoration: none; }
+a:hover			{ color: #0000FF; text-decoration: underline; }
+a:active		{ color: #0000FF; text-decoration: underline; }
+
+/* Menu sub links */
+a.slink:link			{ color: #000000; text-decoration: underline; }
+a.slink:visited			{ color: #000000; text-decoration: underline; }
+a.slink:hover			{ color: #0000FF; text-decoration: underline; }
+a.slink:active			{ color: #0000FF; text-decoration: underline; }
+
+/* Small text */
+.gensmall		{ font-size: 10px; }
+
+/* Titles */
+.smalltitle		{ font-size: 16px; font-weight: bold; }
+.maintitle		{ font-size: 20px; font-weight: bold; }
+
+/* Code */
+.code			{ font-family: Courier, 'Courier New', sans-serif; font-size: 11px; text-decoration: none; }
+.codeblock		{ font-family: Courier, 'Courier New', sans-serif; font-size: 11px; text-decoration: none;
+					background-color: #D0D0D0; border: #A7A7A7; border-style: solid;
+					border-left-width: 1px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; }
+
+/* Special Cases */
+.gensmallwhite	{ font-size: 10px; color: #FFFFFF; }
